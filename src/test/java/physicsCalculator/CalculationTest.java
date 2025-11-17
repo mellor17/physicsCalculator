@@ -34,11 +34,28 @@ public class CalculationTest {
         testBody.netForceY = 100;
         testBody.netForceZ = 300;
 
+    void assertThatForceIsResetToZero() {
+        Body testBody = new Body("Test", 100, 10, 100, 90, 90, 1000, 80);
         testBody.resetForce();
 
         assertEquals(0, testBody.netForceX);
         assertEquals(0, testBody.netForceY);
         assertEquals(0, testBody.netForceZ);
+
+    }
+
+    @Test
+    void assertThatTotalEnergyCalculationsReturnCorrectValues() {
+
+    }
+
+    @Test
+    void assertThatKineticEnergyCalculationsReturnCorrectValues() {
+
+    }
+
+    @Test
+    void assertThatPotentialEnergyCalculationsReturnCorrectValues() {
 
     }
 

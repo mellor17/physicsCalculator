@@ -2,7 +2,7 @@ package physicsCalculator;
 
 import java.util.ArrayList;
 
-public class CalculationEngine {
+public class  CalculationEngine {
     // the letter e is used to denote the power of 10, so
     // mass of sun would be 1.989 x 10^30kg
     private static final double gravitationalConstant = 6.674e-11;
@@ -85,9 +85,11 @@ public class CalculationEngine {
         double totalPotentialEnergy = 0;
 
         for (int i = 0; i < celestialBodies.size(); i++) {
-            for (int j = 0; j < celestialBodies.size(); j++) {
+            for (int j = i  + 1 ; j < celestialBodies.size(); j++) {
                 Body bodyA = celestialBodies.get(i);
                 Body bodyB = celestialBodies.get(j);
+
+
 
                 double totalDistance = getTotalDistance(bodyB, bodyA);
 
