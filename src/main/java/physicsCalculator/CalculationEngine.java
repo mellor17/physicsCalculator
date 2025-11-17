@@ -93,7 +93,7 @@ public class CalculationEngine {
 
                 if (totalDistance == 0) {
                     continue; // skip if they are in the same spot so we can't have two bodies in the same position which can break things
-                } // also is not physically possible
+                } // also it is not physically possible
                 double pairedPotentialEnergy = -gravitationalConstant * (bodyA.mass * bodyB.mass / totalDistance);
                 totalPotentialEnergy += pairedPotentialEnergy;
 
@@ -119,7 +119,7 @@ public class CalculationEngine {
         double distanceX = bodyB.positionX - bodyA.positionX;
         double distanceY = bodyB.positionY - bodyA.positionY;
         double distanceZ = bodyB.positionZ - bodyA.positionZ;
-        double totalDistance = getTotalDistance(bodyB, bodyA); // r in our formula total distace
+        double totalDistance = getTotalDistance(bodyB, bodyA);
 
         if (totalDistance == 0)
             return; // this stops us dividing by zero which can be catastrophic for a program i think}
@@ -141,8 +141,7 @@ public class CalculationEngine {
 
     public static double calculateGravitionalForce(Body bodyA, Body bodyB) {
         double totalDistance = getTotalDistance(bodyB, bodyA);
-        double gravitionalForce = gravitationalConstant  * (bodyA.mass * bodyB.mass) / Math.pow(2, totalDistance);
-        return 0;
+        return gravitationalConstant  * (bodyA.mass * bodyB.mass) / Math.pow(2, totalDistance);
     }
 
     public static double calculateCentripetalForce(Body bodyA, Body bodyB) {

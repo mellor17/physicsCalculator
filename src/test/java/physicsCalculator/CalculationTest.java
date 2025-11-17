@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static physicsCalculator.CalculationBody.*; // uses the static variables in adding for our tests
+import static physicsCalculator.CalculationBody.*; // uses the static variables in calculation body for our tests
 
 public class CalculationTest {
 
@@ -26,9 +26,25 @@ public class CalculationTest {
         assertEquals(80, testBody.velocityZ);
     }
 
+    @Test
+    void assertThatResetForceMethodSetsAllForcesToZero() {
+        Body testBody = new Body("Test", 10, 0, 0,0,0,0,0);
+
+        testBody.netForceX = 200;
+        testBody.netForceY = 100;
+        testBody.netForceZ = 300;
+
+        testBody.resetForce();
+
+        assertEquals(0, testBody.netForceX);
+        assertEquals(0, testBody.netForceY);
+        assertEquals(0, testBody.netForceZ);
+
+    }
+
 
     /**
-     * Due to the nature of the n-body problem it is difficult to get specifically accurate figures when testing,
+     * Due to the nature of the n-body problem it is difficult to get specifically accurate figures when testing the system,
      * but we can approximate using smaller figures and test different concepts like the concept of conservation of energy.
      * As we are working within a closed/isolated system, the law of conservation states that the amount of energy in it will be constant. (hopefully ¯\_(ツ)_/¯)
      * We still can test however using approximate figures and to a number of decimal places for tolerance
@@ -72,7 +88,8 @@ public class CalculationTest {
 
         double tolerance = 1e31; // margin for error looks huge but in relation to the simulation it is actually quite small only tiny percentage
         double finalEnergy = CalculationEngine.calculateTotalEnergy(testBodies);
-        System.out.println("Initial Energy: " + initialEnergy + "\nTotal Energy: " + finalEnergy + "\n"); // result will be negative because we are only working in 2d for now and he
+        System.out.println("Initial Energy: " + initialEnergy + "\nTotal Energy: " + finalEnergy + "\n");
+        // result will be negative because we are only working in 2d for now and that means eventually the body will be in a negative position on a coordinate plane
         assertEquals(initialEnergy, finalEnergy, tolerance);
     }
 
@@ -86,8 +103,6 @@ public class CalculationTest {
         testBodies.add(body2);
 
         CalculationEngine.calculateNBodyProblem(testBodies, 60, CalculationBody.sixMonthsInSeconds, true);
-
-
 
 
     }
