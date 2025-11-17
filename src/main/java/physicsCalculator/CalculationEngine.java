@@ -38,17 +38,17 @@ public class  CalculationEngine {
                 if (t == 0 || (t / timeStep) % printFrequency == 0) {
                     System.out.printf("\u001B[35m" + "--- Time: %.0f s --- \n", t);
                     for (Body currentBody : celestialBodies) {
-                        System.out.printf("  %s Position:\n", currentBody.name);
-                        System.out.printf("    X: %.4e\n", currentBody.positionX);
-                        System.out.printf("    Y: %.4e\n", currentBody.positionY);
-                        System.out.printf("    Z: %.4e\n", currentBody.positionZ);
+                        System.out.printf("  %s Position:\n", currentBody.getName());
+                        System.out.printf("    X: %.4e\n", currentBody.getPositionX());
+                        System.out.printf("    Y: %.4e\n", currentBody.getPositionY());
+                        System.out.printf("    Z: %.4e\n", currentBody.getPositionZ());
 
                     }
                     System.out.println("---------------------");
                 }
 
                 try {
-                    Thread.sleep(500); // this is used to slow down the output of the application in the console so the user can see what the output is
+                    Thread.sleep(10); // this is used to slow down the output of the application in the console so the user can see what the output is
                 } catch (InterruptedException exception) {
                     exception.printStackTrace(); // this is required by the sleep method if you look at the method inforamtion
                 }
@@ -72,9 +72,9 @@ public class  CalculationEngine {
 
         for (Body body : bodies) {
 
-            double bodySpeedSquared = (Math.pow(body.velocityX, 2)) + (Math.pow(body.velocityY, 2)) + (Math.pow(body.velocityZ, 2));
+            double bodySpeedSquared = (Math.pow(body.getVelocityX(), 2)) + (Math.pow(body.getVelocityY(), 2)) + (Math.pow(body.getVelocityZ(), 2));
 
-            double bodyKineticEnergy = 0.5 * body.mass * bodySpeedSquared;
+            double bodyKineticEnergy = 0.5 * body.getMass() * bodySpeedSquared;
             totalKineticEnergy += bodyKineticEnergy;
         }
 
@@ -96,7 +96,7 @@ public class  CalculationEngine {
                 if (totalDistance == 0) {
                     continue; // skip if they are in the same spot so we can't have two bodies in the same position which can break things
                 } // also it is not physically possible
-                double pairedPotentialEnergy = -gravitationalConstant * (bodyA.mass * bodyB.mass / totalDistance);
+                double pairedPotentialEnergy = -gravitationalConstant * (bodyA.getMass() * bodyB.getMass() / totalDistance);
                 totalPotentialEnergy += pairedPotentialEnergy;
 
             }
@@ -106,9 +106,9 @@ public class  CalculationEngine {
     }
 
     private static double getTotalDistance(Body bodyB, Body bodyA) {
-        double distanceX = bodyB.positionX - bodyA.positionX;// bodyb must be first because if you take away a from b we will get a negative result, it would mean that the force acting on b is pushing it away so not gravity
-        double distanceZ = bodyB.positionZ - bodyA.positionZ;
-        double distanceY = bodyB.positionY - bodyA.positionY;
+        double distanceX = bodyB.getPositionX() - bodyA.getPositionX();// bodyB must be first because if you take away a from b we will get a negative result, it would mean that the force acting on b is pushing it away so not gravity
+        double distanceZ = bodyB.getPositionZ() - bodyA.getPositionZ();
+        double distanceY = bodyB.getPositionY() - bodyA.getPositionY();
 
         // r in our formula total distace
         return Math.sqrt((distanceX * distanceX) + (distanceY * distanceY) + (distanceZ * distanceZ));
@@ -118,14 +118,14 @@ public class  CalculationEngine {
     public static void calculateForcesAndApplyValues(Body bodyA, Body bodyB) {
 
         // also i don't think i can use my method here as it needs these variables further down
-        double distanceX = bodyB.positionX - bodyA.positionX;
-        double distanceY = bodyB.positionY - bodyA.positionY;
-        double distanceZ = bodyB.positionZ - bodyA.positionZ;
+        double distanceX = bodyB.getPositionX() - bodyA.getPositionX();
+        double distanceY = bodyB.getPositionY() - bodyA.getPositionY();
+        double distanceZ = bodyB.getPositionZ() - bodyA.getPositionZ();
         double totalDistance = getTotalDistance(bodyB, bodyA);
 
         if (totalDistance == 0)
             return; // this stops us dividing by zero which can be catastrophic for a program i think}
-        double magnitudeOfForce = gravitationalConstant * (bodyA.mass * bodyB.mass) / Math.pow(totalDistance, 2);
+        double magnitudeOfForce = gravitationalConstant * (bodyA.getMass() * bodyB.getMass()) / Math.pow(totalDistance, 2);
 
 
         // This calculates the force for Body A, to find the force for bodyB is just the opposite, so negative force X, Y & Z
@@ -137,13 +137,12 @@ public class  CalculationEngine {
         bodyB.updateNetForce(-forceX, -forceY, -forceZ); // this saves code and time because we now don't have to calculate the force for the other bod
         // we just know that the force for body B will directly opposite to A
 
-
     }
 
 
     public static double calculateGravitionalForce(Body bodyA, Body bodyB) {
         double totalDistance = getTotalDistance(bodyB, bodyA);
-        return gravitationalConstant  * (bodyA.mass * bodyB.mass) / Math.pow(2, totalDistance);
+        return gravitationalConstant  * (bodyA.getMass() * bodyB.getMass()) / Math.pow(2, totalDistance);
     }
 
     public static double calculateCentripetalForce(Body bodyA, Body bodyB) {
