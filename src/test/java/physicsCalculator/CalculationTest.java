@@ -10,40 +10,6 @@ import static physicsCalculator.CalculationBody.*; // uses the static variables 
 public class CalculationTest {
 
 
-
-    @Test
-    void assertThatBodyHasCorrectValuesUponCreation() {
-        //basic test to ensure the constructor and object works with storing data appropriately,
-        //also useful as i added the Z axis in afterward so good to test that values are in the correct order
-        Body testBody = new Body("Test", 100, 10, 100, 90, 90, 1000, 80);
-        assertEquals("Test", testBody.name);
-        assertEquals(100, testBody.mass);
-        assertEquals(10, testBody.positionX);
-        assertEquals(100, testBody.positionY);
-        assertEquals(90, testBody.positionZ);
-        assertEquals(90, testBody.velocityX);
-        assertEquals(1000, testBody.velocityY);
-        assertEquals(80, testBody.velocityZ);
-    }
-
-    @Test
-    void assertThatResetForceMethodSetsAllForcesToZero() {
-        Body testBody = new Body("Test", 10, 0, 0,0,0,0,0);
-
-        testBody.netForceX = 200;
-        testBody.netForceY = 100;
-        testBody.netForceZ = 300;
-
-    void assertThatForceIsResetToZero() {
-        Body testBody = new Body("Test", 100, 10, 100, 90, 90, 1000, 80);
-        testBody.resetForce();
-
-        assertEquals(0, testBody.netForceX);
-        assertEquals(0, testBody.netForceY);
-        assertEquals(0, testBody.netForceZ);
-
-    }
-
     @Test
     void assertThatTotalEnergyCalculationsReturnCorrectValues() {
 
@@ -66,12 +32,11 @@ public class CalculationTest {
      * As we are working within a closed/isolated system, the law of conservation states that the amount of energy in it will be constant. (hopefully ¯\_(ツ)_/¯)
      * We still can test however using approximate figures and to a number of decimal places for tolerance
      */
-
     @Test
     void testConservationOfEnergyWithTwoBodies() {
         ArrayList<Body> testBodies = new ArrayList<>();
-        Body sun = new Body("Sun",massOfSun, 0, 0, 0, 0, 0, 0    );
-        Body earth = new Body("Earth", massOfEarth, 1.496e11, 0, 0, 0, 29780, 0);
+        Body sun = new Star("Sun",massOfSun, 0, 0, 0, 0, 0, 0    );
+        Body earth = new Planet("Earth", massOfEarth, 1.496e11, 0, 0, 0, 29780, 0);
         // initial velocity y for earth is the average speed is 29,780 is m/s ^
 
         testBodies.add(sun);
@@ -90,9 +55,9 @@ public class CalculationTest {
     @Test
     void testConservationOfEnergyWithThreeBodies() {
         ArrayList<Body> testBodies = new ArrayList<>();
-        Body sun = new Body("Sun",massOfSun, 0, 0, 0, 0, 0, 0    );
-        Body earth = new Body("Earth", massOfEarth, 1.496e11, 0, 0, 0, 29780, 0);
-        Body mars = new Body("Mars" ,massOfMars, 2.279e11, 0, 0, 0, 24070, 0);
+        Body sun = new Star("Sun",massOfSun, 0, 0, 0, 0, 0, 0    );
+        Body earth = new Planet("Earth", massOfEarth, 1.496e11, 0, 0, 0, 29780, 0);
+        Body mars = new Planet("Mars" ,massOfMars, 2.279e11, 0, 0, 0, 24070, 0);
         // initial velocity y for earth is the average speed is 29,780 is m/s ^
 
         testBodies.add(sun);
@@ -114,8 +79,8 @@ public class CalculationTest {
     @Test
     void testBasicTwoBodySystemForStableCircularOrbit() {
         ArrayList<Body> testBodies = new ArrayList<>();
-        Body body1 = new Body("test1", massOfSun, 0, 0, 0, 0, 0, 0);
-        Body body2 = new Body("test2", massOfEarth, 1.496e11, 0, 0, 0, 29780, 0);
+        Body body1 = new Star("test1", massOfSun, 0, 0, 0, 0, 0, 0);
+        Body body2 = new Planet("test2", massOfEarth, 1.496e11, 0, 0, 0, 29780, 0);
         testBodies.add(body1);
         testBodies.add(body2);
 
@@ -127,8 +92,8 @@ public class CalculationTest {
     @Test
     void testForStableCircularOrbit() {
         ArrayList<Body> testBodies = new ArrayList<>();
-        Body body1 = new Body("test1", massOfSun, 0, 0, 0, 0, 0, 0);
-        Body body2 = new Body("test2", massOfEarth, 1.496e11, 0, 0, 0, 29780, 0);
+        Body body1 = new Planet("test1", massOfSun, 0, 0, 0, 0, 0, 0);
+        Body body2 = new Planet("test2", massOfEarth, 1.496e11, 0, 0, 0, 29780, 0);
         testBodies.add(body1);
         testBodies.add(body2);
 

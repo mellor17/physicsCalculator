@@ -6,6 +6,9 @@ import static physicsCalculator.InputUtility.scanner;
 
 public class CalculationBody {
 
+    /**
+     * global variables
+     * */
     static final double massOfSun = 1.989e30;
     static final double massOfEarth = 5.972e24;
     static final double massOfMars = 6.39e23;
@@ -16,12 +19,9 @@ public class CalculationBody {
     static final double oneMonthInSeconds = yearInSeconds / 12;
 
     /**
-     * Method used to choose calculation options
+     * Method used to choose simulation options
      *
      */
-
-
-
 
     public static void nBodyProblem() { // I have also used the extract method command in intellij IDE  to create this method. See below for its full details
         System.out.println("The N-body problem, in celestial mechanics, is predicting the motions of any number of masses (N) under mutual gravitational attraction, given their initial positions, velocities, and masses.");
@@ -39,8 +39,8 @@ public class CalculationBody {
         System.out.println("------------------------------------------------");
 
         if (presetChoice == 1) {
-            Body sun = new Body("Sun",massOfSun, 0, 0, 0, 0, 0, 0    ); // initial velocity y for earth is the average speed is 29,780 is m/s
-            Body earth = new Body("Earth", massOfEarth, 1.496e11, 0, 0, 0, 29780, 0); // initial x is the average distance from the earth to the sun, which is an astronomical unit (AU)
+            Body sun = new Star("Sun",massOfSun, 0, 0, 0, 0, 0, 0    ); // initial velocity y for earth is the average speed is 29,780 is m/s
+            Body earth = new Planet("Earth" ,massOfEarth, 1.496e11, 0, 0, 0, 29780, 0); // initial x is the average distance from the earth to the sun, which is an astronomical unit (AU)
 
             celestialBodies.add(sun);
             celestialBodies.add(earth);
@@ -48,9 +48,9 @@ public class CalculationBody {
             CalculationEngine.calculateNBodyProblem(celestialBodies, 60, 31_536_000, false);
 
         } else if (presetChoice == 2) {
-            Body sun = new Body("Sun",massOfSun, 0, 0, 0, 0, 0, 0 );
-            Body earth = new Body("Earth",massOfEarth, 1.496e11, 0, 0, 0, 29780, 0);
-            Body mars = new Body("Mars" ,massOfMars, 2.279e11, 0, 0, 0, 24070, 0);
+            Body sun = new Star("Sun",massOfSun, 0, 0, 0, 0, 0, 0 );
+            Body earth = new Planet("Earth",massOfEarth, 1.496e11, 0, 0, 0, 29780, 0);
+            Body mars = new Planet("Mars" ,massOfMars, 2.279e11, 0, 0, 0, 24070, 0);
 
             celestialBodies.add(sun);
             celestialBodies.add(earth);
@@ -78,26 +78,17 @@ public class CalculationBody {
             int simulationTimeResponse = scanner.nextInt();
 
 
-            switch (simulationTimeResponse) {
-                case 1:
-                    totalTime = yearInSeconds;
-                    break;
-                case 2:
-                    totalTime = sixMonthsInSeconds;
-                    break;
-                case 3:
-                    totalTime = tenYearsInSeconds;
-                    break;
-                case 4:
-                    totalTime = fiveYearsInSeconds;
-                    break;
-                case 5:
-                    totalTime = oneMonthInSeconds;
-                    break;
-                default:
+            totalTime = switch (simulationTimeResponse) { // intelliJ idea IDE recommended this to me as a fix looks better than previous
+                case 1 -> yearInSeconds;
+                case 2 -> sixMonthsInSeconds;
+                case 3 -> tenYearsInSeconds;
+                case 4 -> fiveYearsInSeconds;
+                case 5 -> oneMonthInSeconds;
+                default -> {
                     System.out.print("Enter the total simulation duration in seconds (S): ");
-                    totalTime = scanner.nextInt();
-            }
+                    yield scanner.nextInt(); // this is used to return a value in the default case, so if we have
+                }
+            };
 
             scanner.nextLine(); // added this to fix the input buffer consuming the newline character added when doing next int, cause it was breaking body name input section
 
@@ -114,6 +105,7 @@ public class CalculationBody {
                     System.out.println("Enter a name for the Body: ");
                     bodyName = scanner.nextLine();
                 }
+
 
                 System.out.println("--- Body: " + bodyName + " ---");
 
@@ -138,10 +130,25 @@ public class CalculationBody {
 
                 System.out.print("Initial Z Velocity (m/s): ");
                 double velocityZ = scanner.nextDouble();
+
+
+                System.out.println("Is your body a Planet (1) or Star (2)?");
+                int answer = scanner.nextInt();
                 scanner.nextLine();
+                if (answer == 1) {
+                    celestialBodies.add(new Planet(bodyName, mass, positionX, positionY, positionZ, velocityX, velocityY, velocityZ));
+
+                } else {
+                    celestialBodies.add(new Star(bodyName, mass, positionX, positionY, positionZ, velocityX, velocityY, velocityZ));
+
+                }
+
+                if (numberOfBodies > 1) {
+                    System.out.println("-------- NEXT BODY --------");
+                }
 
 
-                celestialBodies.add(new Body(bodyName, mass, positionX, positionY, positionZ, velocityX, velocityY, velocityZ));
+
 
             }
             CalculationEngine.calculateNBodyProblem(celestialBodies, timeStep, totalTime, false);
@@ -153,6 +160,10 @@ public class CalculationBody {
         String[] randomMessages = {"Thank you for joining my program—can’t wait to have you back soon!", "Appreciate you being part of my program; hope we cross paths again soon!", "Thanks for taking part in my program; looking forward to seeing you again!", "Thanks for being here—hope to welcome you back to the program soon!", "Grateful you joined the program; I hope we get to do this again soon!", "Thanks for sticking with it—consider this your official permission to skive off home until next time.", "You were brilliant—almost suspiciously so. Pop back in before we start missing you.", "Right, that’s the lot mind how you go, and come back before my processors run out."};
         int randNum = (int) (Math.random() * randomMessages.length);
         return randomMessages[randNum];
+    }
+
+    public static String timeConversionMethod(int seconds) {
+        return  String.valueOf(seconds);
     }
 
 }

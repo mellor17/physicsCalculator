@@ -1,17 +1,16 @@
 package physicsCalculator;
 
-public class Body {
-
+public abstract class Body {
+//TODO: Write two extended classes for a star and planet to accomplish Advanced OO and Inheritance, add more tests for the methods in Engine, add interfaces and inheritance for advanced OOP
     // this declares the variables we need to use in the N-body formula
-    String name;
-    double mass;
-    double positionX, positionY, positionZ;
-    double velocityX, velocityY, velocityZ;
-    double netForceX, netForceY, netForceZ;
-
+    private final String name;
+    private final double mass;
+    private double positionX, positionY, positionZ;
+    private double velocityX, velocityY, velocityZ;
+    private double netForceX, netForceY, netForceZ;
     /**
      * This is a constructor this uses the variables in the class to create a new object that can be used across our programme
-     *  I also added Z in after making the initial program so that is why it is at the end.
+     *  I also added Z in after making the initial program so that is why it is at the end. NOTE: this has been changed after a refactor
      * */
     public Body(String name, double initial_mass, double initial_x, double initial_y, double initial_z, double initial_vx, double initial_vy,  double initial_vz) {
         this.name = name;
@@ -25,6 +24,62 @@ public class Body {
         this.netForceX = 0;
         this.netForceY = 0;
         this.netForceZ = 0;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getMass() {
+        return mass;
+    }
+
+    public double getPositionX() {
+        return positionX;
+    }
+
+    public double getPositionY() {
+        return positionY;
+    }
+
+    public double getPositionZ() {
+        return positionZ;
+    }
+
+    public double getVelocityX() {
+        return velocityX;
+    }
+
+    public double getVelocityY() {
+        return velocityY;
+    }
+
+    public double getVelocityZ() {
+        return velocityZ;
+    }
+
+    public double getNetForceX() {
+        return netForceX;
+    }
+
+    public double getNetForceY() {
+        return netForceY;
+    }
+
+    public double getNetForceZ() {
+        return netForceZ;
+    }
+
+    public void setNetForceX(double netForceX) {
+        this.netForceX = netForceX;
+    }
+
+    public void setNetForceY(double netForceY) {
+        this.netForceY = netForceY;
+    }
+
+    public void setNetForceZ(double netForceZ) {
+        this.netForceZ = netForceZ;
     }
 
     public void resetForce() {
