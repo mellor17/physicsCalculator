@@ -17,7 +17,6 @@ public class CalculationBody {
     static final double fiveYearsInSeconds = yearInSeconds * 5;
     static final double sixMonthsInSeconds = yearInSeconds / 2;
     static final double oneMonthInSeconds = yearInSeconds / 12;
-
     /**
      * Method used to choose simulation options
      *
@@ -39,8 +38,8 @@ public class CalculationBody {
         System.out.println("------------------------------------------------");
 
         if (presetChoice == 1) {
-            Body sun = new Star("Sun",massOfSun, 0, 0, 0, 0, 0, 0    ); // initial velocity y for earth is the average speed is 29,780 is m/s
-            Body earth = new Planet("Earth" ,massOfEarth, 1.496e11, 0, 0, 0, 29780, 0); // initial x is the average distance from the earth to the sun, which is an astronomical unit (AU)
+            Body sun = new Star("Sun",massOfSun, 0, 0, 0, 0, 0, 0, Star.StarType.YELLOW_DWARF ); // initial velocity y for earth is the average speed is 29,780 is m/s
+            Body earth = new Planet("Earth" ,massOfEarth, 1.496e11, 0, 0, 0, 29780, 0, Planet.PlanetType.TERRESTRIAL); // initial x is the average distance from the earth to the sun, which is an astronomical unit (AU)
 
             celestialBodies.add(sun);
             celestialBodies.add(earth);
@@ -48,9 +47,9 @@ public class CalculationBody {
             CalculationEngine.calculateNBodyProblem(celestialBodies, 60, 31_536_000, false);
 
         } else if (presetChoice == 2) {
-            Body sun = new Star("Sun",massOfSun, 0, 0, 0, 0, 0, 0 );
-            Body earth = new Planet("Earth",massOfEarth, 1.496e11, 0, 0, 0, 29780, 0);
-            Body mars = new Planet("Mars" ,massOfMars, 2.279e11, 0, 0, 0, 24070, 0);
+            Body sun = new Star("Sun",massOfSun, 0, 0, 0, 0, 0, 0, Star.StarType.YELLOW_DWARF);
+            Body earth = new Planet("Earth",massOfEarth, 1.496e11, 0, 0, 0, 29780, 0, Planet.PlanetType.TERRESTRIAL);
+            Body mars = new Planet("Mars" ,massOfMars, 2.279e11, 0, 0, 0, 24070, 0, Planet.PlanetType.TERRESTRIAL);
 
             celestialBodies.add(sun);
             celestialBodies.add(earth);
@@ -133,13 +132,47 @@ public class CalculationBody {
 
 
                 System.out.println("Is your body a Planet (1) or Star (2)?");
-                int answer = scanner.nextInt();
+                int objectType = scanner.nextInt();
                 scanner.nextLine();
-                if (answer == 1) {
-                    celestialBodies.add(new Planet(bodyName, mass, positionX, positionY, positionZ, velocityX, velocityY, velocityZ));
+                if (objectType == 1) {
+                    System.out.println("""
+                           What is the type of the planet?
+                           1. GAS GIANT
+                           2. TERRESTRIAL
+                           3. DWARF
+                           4. ICE GIANT
+                           5. EXOPLANET""");
+                    int planetTypeChoice = scanner.nextInt();
+                    Planet.PlanetType planetType = switch (planetTypeChoice) {
+                        case 1 -> Planet.PlanetType.GAS_GIANT; // the reason why i have to access them like this is because enums cannot be instantiated, so I have to call it each time like this to access variables within enum
+                        case 2 -> Planet.PlanetType.TERRESTRIAL;
+                        case 3 -> Planet.PlanetType.DWARF;
+                        case 4 -> Planet.PlanetType.ICE_GIANT;
+                        case 5 -> Planet.PlanetType.EXOPLANET;
+                        default -> null;
+                    };
+                    celestialBodies.add(new Planet(bodyName, mass, positionX, positionY, positionZ, velocityX, velocityY, velocityZ, planetType));
 
                 } else {
-                    celestialBodies.add(new Star(bodyName, mass, positionX, positionY, positionZ, velocityX, velocityY, velocityZ));
+                    System.out.println("""
+                           What is the type of the star?
+                           1. RED GIANT
+                           2. BLUE GIANT
+                           3. BROWN DWARF
+                           4. WHITE DWARF
+                           5. NEUTRON STAR
+                           6. YELLOW DWARF""");
+                    int starTypeChoice = scanner.nextInt();
+                    Star.StarType starType = switch (starTypeChoice) {
+                        case 1 -> Star.StarType.RED_GIANT;
+                        case 2 -> Star.StarType.BLUE_GIANT;
+                        case 3 -> Star.StarType.BROWN_DWARF;
+                        case 4 -> Star.StarType.WHITE_DWARF;
+                        case 5 -> Star.StarType.NEUTRON_STAR;
+                        case 6 -> Star.StarType.YELLOW_DWARF;
+                        default -> null;
+                    };
+                    celestialBodies.add(new Star(bodyName, mass, positionX, positionY, positionZ, velocityX, velocityY, velocityZ, starType));
 
                 }
 

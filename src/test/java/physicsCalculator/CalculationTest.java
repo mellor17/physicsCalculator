@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static physicsCalculator.CalculationBody.*; // uses the static variables in calculation body for our tests
 
 public class CalculationTest {
@@ -35,8 +36,8 @@ public class CalculationTest {
     @Test
     void testConservationOfEnergyWithTwoBodies() {
         ArrayList<Body> testBodies = new ArrayList<>();
-        Body sun = new Star("Sun",massOfSun, 0, 0, 0, 0, 0, 0    );
-        Body earth = new Planet("Earth", massOfEarth, 1.496e11, 0, 0, 0, 29780, 0);
+        Body sun = new Star("Sun",massOfSun, 0, 0, 0, 0, 0, 0, null    );
+        Body earth = new Planet("Earth", massOfEarth, 1.496e11, 0, 0, 0, 29780, 0, null);
         // initial velocity y for earth is the average speed is 29,780 is m/s ^
 
         testBodies.add(sun);
@@ -55,9 +56,9 @@ public class CalculationTest {
     @Test
     void testConservationOfEnergyWithThreeBodies() {
         ArrayList<Body> testBodies = new ArrayList<>();
-        Body sun = new Star("Sun",massOfSun, 0, 0, 0, 0, 0, 0    );
-        Body earth = new Planet("Earth", massOfEarth, 1.496e11, 0, 0, 0, 29780, 0);
-        Body mars = new Planet("Mars" ,massOfMars, 2.279e11, 0, 0, 0, 24070, 0);
+        Body sun = new Star("Sun",massOfSun, 0, 0, 0, 0, 0, 0, Star.StarType.YELLOW_DWARF    );
+        Body earth = new Planet("Earth", massOfEarth, 1.496e11, 0, 0, 0, 29780, 0, Planet.PlanetType.TERRESTRIAL);
+        Body mars = new Planet("Mars" ,massOfMars, 2.279e11, 0, 0, 0, 24070, 0, Planet.PlanetType.TERRESTRIAL);
         // initial velocity y for earth is the average speed is 29,780 is m/s ^
 
         testBodies.add(sun);
@@ -79,8 +80,8 @@ public class CalculationTest {
     @Test
     void testBasicTwoBodySystemForStableCircularOrbit() {
         ArrayList<Body> testBodies = new ArrayList<>();
-        Body body1 = new Star("test1", massOfSun, 0, 0, 0, 0, 0, 0);
-        Body body2 = new Planet("test2", massOfEarth, 1.496e11, 0, 0, 0, 29780, 0);
+        Body body1 = new Star("test1", massOfSun, 0, 0, 0, 0, 0, 0, Star.StarType.NEUTRON_STAR);
+        Body body2 = new Planet("test2", massOfEarth, 1.496e11, 0, 0, 0, 29780, 0, Planet.PlanetType.GAS_GIANT);
         testBodies.add(body1);
         testBodies.add(body2);
 
@@ -91,11 +92,24 @@ public class CalculationTest {
 
     @Test
     void testForStableCircularOrbit() {
-        ArrayList<Body> testBodies = new ArrayList<>();
-        Body body1 = new Planet("test1", massOfSun, 0, 0, 0, 0, 0, 0);
-        Body body2 = new Planet("test2", massOfEarth, 1.496e11, 0, 0, 0, 29780, 0);
-        testBodies.add(body1);
-        testBodies.add(body2);
+        Body sun = new Star("sun", massOfSun, 0, 0, 0, 0, 0, 0, null);
+        Body earth = new Planet("earth", massOfEarth, 1.496e11, 0, 0, 0, 29780, 0, null);
+        double tolerance = 1e22;
+
+        double gravitationalForce = CalculationEngine.calculateGravitationalForce(earth, sun);
+        double centripetalForce = CalculationEngine.calculateCentripetalForce(sun, earth);
+        System.out.println(centripetalForce);
+        System.out.println(gravitationalForce);
+
+
+        double difference = Math.abs(gravitationalForce - centripetalForce);
+        System.out.println(difference);
+        boolean isOrbitCircular = false;
+        if (difference < tolerance) {
+            isOrbitCircular = true;
+
+        }
+        assertTrue(isOrbitCircular);
 
 
     }

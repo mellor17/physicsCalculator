@@ -19,10 +19,13 @@ public class Introduction {
                     CalculationBody.nBodyProblem();
                     break;
                 case 2:
+                    System.out.println("NOT YET IMPLEMENTED");
                     break;
                 case 3:
+                    System.out.println("NOT YET IMPLEMENTED1");
                     break;
                 case 4:
+                    System.out.println("NOT YET IMPLEMENTED2");
                     break;
                 default:
                     System.out.println(option + " is not a valid choice");
