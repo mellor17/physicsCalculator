@@ -140,15 +140,30 @@ public class  CalculationEngine {
     }
 
 
-    public static double calculateGravitionalForce(Body bodyA, Body bodyB) {
+    public static double calculateGravitationalForce(Body bodyA, Body bodyB) {
         double totalDistance = getTotalDistance(bodyB, bodyA);
-        return gravitationalConstant  * (bodyA.getMass() * bodyB.getMass()) / Math.pow(2, totalDistance);
+        return gravitationalConstant  * (bodyA.getMass() * bodyB.getMass()) / Math.pow(totalDistance, 2);
     }
+
+
+    /***
+     * Formula for centripetal force used to test whether we have a stable orbit:
+     * Fe = m*v^2/ r
+     * Centripetal Force = mass of rotating body * orbital velocity squared / total distance  between both bodies
+     */
 
     public static double calculateCentripetalForce(Body bodyA, Body bodyB) {
         double totalDistance = getTotalDistance(bodyB, bodyA);
-        double centripetalForce = 0;
-        return centripetalForce;
+        double massOfBodyB = bodyB.getMass();
+        double orbitalVelocity = Math.sqrt(Math.pow(bodyB.getVelocityX(), 2)
+                + Math.pow(bodyB.getVelocityY(), 2)
+                + Math.pow(bodyB.getVelocityZ(), 2));
+        return (massOfBodyB * Math.pow(orbitalVelocity, 2)) / totalDistance;
+    }
+
+    public static double calculateOrbitalVelocity(Body mainBody, double distance) {
+        return Math.sqrt(gravitationalConstant * mainBody.getMass() / distance);
+
     }
 
 

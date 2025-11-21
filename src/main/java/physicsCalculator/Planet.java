@@ -7,7 +7,7 @@ package physicsCalculator;
  * */
 
 public class Planet extends Body {
-    private String planetType;
+    private PlanetType planetType;
 
     /**
      * This is a constructor this uses the variables in the class to create a new object that can be used across our programme
@@ -30,11 +30,23 @@ public class Planet extends Body {
      * velocity in y axis
      * @param initial_vz
      * velocity in z axis
-//     * @param planetType
-     *
+     * @param planetType
+     * type of planet, determines factors
      */
-    public Planet(String name /*String planetType*/, double initial_mass, double initial_x, double initial_y, double initial_z, double initial_vx, double initial_vy, double initial_vz) {
+    public Planet(String name /*String planetType*/, double initial_mass, double initial_x, double initial_y, double initial_z, double initial_vx, double initial_vy, double initial_vz, PlanetType planetType) {
         super(name,initial_mass, initial_x, initial_y, initial_z, initial_vx, initial_vy, initial_vz);
-//        this.planetType = planetType;
+        this.planetType = planetType;
+    }
+
+    public enum PlanetType {
+        GAS_GIANT,
+        TERRESTRIAL,
+        DWARF,
+        ICE_GIANT,
+        EXOPLANET
+    }
+
+    public PlanetType getPlanetType() {
+        return planetType;
     }
 }
