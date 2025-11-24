@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class  CalculationEngine {
     // the letter e is used to denote the power of 10, so
     // mass of sun would be 1.989 x 10^30kg
-    private static final double gravitationalConstant = 6.674e-11;
+    public static final double gravitationalConstant = 6.674e-11;
 
 
     // static just means that the objects or items within that scope are accessible without needing to instantiate a new instance
@@ -14,7 +14,6 @@ public class  CalculationEngine {
         for (double t = 0; t < totalDuration; t += timeStep) {         // this is the time loop for each iteration of the simulation
             for (Body body : celestialBodies) {
                 body.resetForce();
-
             }
 
             for (int i = 0; i < celestialBodies.size(); i++) {
@@ -23,7 +22,7 @@ public class  CalculationEngine {
                     Body bodyA = celestialBodies.get(i);
                     Body bodyB = celestialBodies.get(j);
 
-
+                    checkForCollisionDetection(bodyA, bodyB);
                     calculateForcesAndApplyValues(bodyA, bodyB);
 
                 }
@@ -38,10 +37,13 @@ public class  CalculationEngine {
                 if (t == 0 || (t / timeStep) % printFrequency == 0) {
                     System.out.printf("\u001B[35m" + "--- Time: %.0f s --- \n", t);
                     for (Body currentBody : celestialBodies) {
-                        System.out.printf("  %s Position:\n", currentBody.getName());
+                        String color = currentBody.getColorCode();
+                        String emoji = currentBody.getEmoji();
+                        String reset = "\u001B[0m";
+                        System.out.printf("%s  %s %s Position:\n", color, emoji, currentBody.getName());
                         System.out.printf("    X: %.4e\n", currentBody.getPositionX());
                         System.out.printf("    Y: %.4e\n", currentBody.getPositionY());
-                        System.out.printf("    Z: %.4e\n", currentBody.getPositionZ());
+                        System.out.printf("    Z: %.4e\n%s", currentBody.getPositionZ(), reset);
 
                     }
                     System.out.println("---------------------");
@@ -56,15 +58,22 @@ public class  CalculationEngine {
         }
     }
 
-
+    // Takes both results from the energy methods and adds them together, used to test conservation of energy
     public static double calculateTotalEnergy(ArrayList<Body> celestialBodies) {
-        double totalPotentialEnergy = calculateTotalPotentialEnergy(celestialBodies);
-
-        double totalKineticEnergy = calculateTotalKineticEnergy(celestialBodies);
-
-        return totalKineticEnergy + totalPotentialEnergy;
-
+        return calculateTotalKineticEnergy(celestialBodies) + calculateTotalPotentialEnergy(celestialBodies);
     }
+
+
+    /**
+     * The formula for this method is:
+     * KE = 1/2mv^2
+     * In English this means:
+     * Kinetic Energy = 0.5 or half multiplied by mass, by velocity squared
+     * This method accomplishes this by looping through each body in the Body ArrayList.
+     * Then it calculated the speed of each body by adding the velocity squared of X,Y,Z and then getting a new value of the kinetic energy of the body it is iterating over
+     * by multiplying 0.5, the mass of the body and then the velocity squared or speed
+     * Finally it is added to the total kinetic energy to return the value for the calculate total energy method
+     * */
 
     public static double calculateTotalKineticEnergy(ArrayList<Body> bodies) {
 
@@ -81,6 +90,10 @@ public class  CalculationEngine {
         return totalKineticEnergy;
     }
 
+
+    /**
+     * Potential Energy has the formula
+     * */
     public static double calculateTotalPotentialEnergy(ArrayList<Body> celestialBodies) {
         double totalPotentialEnergy = 0;
 
@@ -105,12 +118,18 @@ public class  CalculationEngine {
 
     }
 
-    private static double getTotalDistance(Body bodyB, Body bodyA) {
-        double distanceX = bodyB.getPositionX() - bodyA.getPositionX();// bodyB must be first because if you take away a from b we will get a negative result, it would mean that the force acting on b is pushing it away so not gravity
+    /**
+     * This method takes values from each body parameter and then returns them through the total distance formula:
+     * r = √x^2 * y^2 * z^2
+     * Total distance =  square root of x^2 multiplied by y^2 multiplied by z^2
+     * */
+    public static double getTotalDistance(Body bodyB, Body bodyA) {
+        // bodyB must be first because if you take away a from b we will get a negative result, it would mean that the force acting on b is pushing it away so that is not gravity but repulsion
+        double distanceX = bodyB.getPositionX() - bodyA.getPositionX();
         double distanceZ = bodyB.getPositionZ() - bodyA.getPositionZ();
         double distanceY = bodyB.getPositionY() - bodyA.getPositionY();
 
-        // r in our formula total distace
+        // r in our formula total distance
         return Math.sqrt((distanceX * distanceX) + (distanceY * distanceY) + (distanceZ * distanceZ));
     }
 
@@ -124,7 +143,7 @@ public class  CalculationEngine {
         double totalDistance = getTotalDistance(bodyB, bodyA);
 
         if (totalDistance == 0)
-            return; // this stops us dividing by zero which can be catastrophic for a program i think}
+            return; // this stops us dividing by zero which can be catastrophic for a program i think
         double magnitudeOfForce = gravitationalConstant * (bodyA.getMass() * bodyB.getMass()) / Math.pow(totalDistance, 2);
 
 
@@ -148,7 +167,7 @@ public class  CalculationEngine {
 
     /***
      * Formula for centripetal force used to test whether we have a stable orbit:
-     * Fe = m*v^2/ r
+     * Fe = m * v^2 / r
      * Centripetal Force = mass of rotating body * orbital velocity squared / total distance  between both bodies
      */
 
@@ -161,10 +180,25 @@ public class  CalculationEngine {
         return (massOfBodyB * Math.pow(orbitalVelocity, 2)) / totalDistance;
     }
 
-    public static double calculateOrbitalVelocity(Body mainBody, double distance) {
-        return Math.sqrt(gravitationalConstant * mainBody.getMass() / distance);
+//
+//    public static double calculateOrbitalVelocity(Body mainBody, double distance) {
+//        return Math.sqrt(gravitationalConstant * mainBody.getMass() / distance);
+//
+//    }
+
+    public static void checkForCollisionDetection(Body bodyA, Body bodyB) {
+        double totalDistance = CalculationEngine.getTotalDistance(bodyA, bodyB);
+        if (totalDistance <= bodyA.getRadius() + bodyB.getRadius()) {
+            System.out.printf("\u001B[31m💥 COLLISION DETECTED! 💥\n%s %s and %s %s have collided! Simulation ending!\u001B[0m\n",
+                bodyA.getEmoji(), bodyA.getName(), bodyB.getEmoji(), bodyB.getName());
+            System.exit(500);
+
+
+        }
 
     }
+
+
 
 
 }

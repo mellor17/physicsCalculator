@@ -12,6 +12,9 @@ public class CalculationBody {
     static final double massOfSun = 1.989e30;
     static final double massOfEarth = 5.972e24;
     static final double massOfMars = 6.39e23;
+    static final double radiusOfSun = 6.955e8;
+    static final double radiusOfEarth = 6.371e6;
+    static final double radiusOfMars = 3.39e6;
     static final double yearInSeconds = 31_536_000; // note, you can use underscores to separate multiple digit numbers although these can be put anywhere as java ignores them
     static final double tenYearsInSeconds = yearInSeconds * 10;
     static final double fiveYearsInSeconds = yearInSeconds * 5;
@@ -38,8 +41,8 @@ public class CalculationBody {
         System.out.println("------------------------------------------------");
 
         if (presetChoice == 1) {
-            Body sun = new Star("Sun",massOfSun, 0, 0, 0, 0, 0, 0, Star.StarType.YELLOW_DWARF ); // initial velocity y for earth is the average speed is 29,780 is m/s
-            Body earth = new Planet("Earth" ,massOfEarth, 1.496e11, 0, 0, 0, 29780, 0, Planet.PlanetType.TERRESTRIAL); // initial x is the average distance from the earth to the sun, which is an astronomical unit (AU)
+            Body sun = new Star("Sun",massOfSun, 0, 0, 0, 0, 0, 0,radiusOfSun, Star.StarType.YELLOW_DWARF ); // initial velocity y for earth is the average speed is 29,780 is m/s
+            Body earth = new Planet("Earth" ,massOfEarth, 1.496e11, 0, 0, 0, 29780, 0,radiusOfEarth, Planet.PlanetType.TERRESTRIAL); // initial x is the average distance from the earth to the sun, which is an astronomical unit (AU)
 
             celestialBodies.add(sun);
             celestialBodies.add(earth);
@@ -47,9 +50,9 @@ public class CalculationBody {
             CalculationEngine.calculateNBodyProblem(celestialBodies, 60, 31_536_000, false);
 
         } else if (presetChoice == 2) {
-            Body sun = new Star("Sun",massOfSun, 0, 0, 0, 0, 0, 0, Star.StarType.YELLOW_DWARF);
-            Body earth = new Planet("Earth",massOfEarth, 1.496e11, 0, 0, 0, 29780, 0, Planet.PlanetType.TERRESTRIAL);
-            Body mars = new Planet("Mars" ,massOfMars, 2.279e11, 0, 0, 0, 24070, 0, Planet.PlanetType.TERRESTRIAL);
+            Body sun = new Star("Sun",massOfSun, 0, 0, 0, 0, 0, 0, radiusOfSun,Star.StarType.YELLOW_DWARF);
+            Body earth = new Planet("Earth",massOfEarth, 1.496e11, 0, 0, 0, 29780, 0,radiusOfEarth, Planet.PlanetType.TERRESTRIAL);
+            Body mars = new Planet("Mars" ,massOfMars, 2.279e11, 0, 0, 0, 24070,0 ,radiusOfMars, Planet.PlanetType.TERRESTRIAL);
 
             celestialBodies.add(sun);
             celestialBodies.add(earth);
@@ -61,7 +64,7 @@ public class CalculationBody {
             int numberOfBodies = scanner.nextInt();
 
             System.out.print("Enter the simulation time step (Δt): "); // delta t, this determines how much time in seconds that the program should move after each loop
-            double timeStep = scanner.nextDouble();
+            double timeStep = scanner.nextDouble();                    // delta t just means small step or change and is a greek letter
 
             System.out.println("""
                 Select a simulation time, or choose your own:");
@@ -84,7 +87,7 @@ public class CalculationBody {
                 case 4 -> fiveYearsInSeconds;
                 case 5 -> oneMonthInSeconds;
                 default -> {
-                    System.out.print("Enter the total simulation duration in seconds (S): ");
+                    System.out.print("Enter the total simulation duration in seconds (S):");
                     yield scanner.nextInt(); // this is used to return a value in the default case, so if we have
                 }
             };
@@ -130,6 +133,8 @@ public class CalculationBody {
                 System.out.print("Initial Z Velocity (m/s): ");
                 double velocityZ = scanner.nextDouble();
 
+                System.out.println("Body Radius (m): ");
+                double radius = scanner.nextDouble();
 
                 System.out.println("Is your body a Planet (1) or Star (2)?");
                 int objectType = scanner.nextInt();
@@ -143,6 +148,7 @@ public class CalculationBody {
                            4. ICE GIANT
                            5. EXOPLANET""");
                     int planetTypeChoice = scanner.nextInt();
+                    scanner.nextLine();
                     Planet.PlanetType planetType = switch (planetTypeChoice) {
                         case 1 -> Planet.PlanetType.GAS_GIANT; // the reason why i have to access them like this is because enums cannot be instantiated, so I have to call it each time like this to access variables within enum
                         case 2 -> Planet.PlanetType.TERRESTRIAL;
@@ -151,7 +157,7 @@ public class CalculationBody {
                         case 5 -> Planet.PlanetType.EXOPLANET;
                         default -> null;
                     };
-                    celestialBodies.add(new Planet(bodyName, mass, positionX, positionY, positionZ, velocityX, velocityY, velocityZ, planetType));
+                    celestialBodies.add(new Planet(bodyName, mass, positionX, positionY, positionZ, velocityX, velocityY, velocityZ,  radius, planetType));
 
                 } else {
                     System.out.println("""
@@ -163,6 +169,7 @@ public class CalculationBody {
                            5. NEUTRON STAR
                            6. YELLOW DWARF""");
                     int starTypeChoice = scanner.nextInt();
+                    scanner.nextLine();
                     Star.StarType starType = switch (starTypeChoice) {
                         case 1 -> Star.StarType.RED_GIANT;
                         case 2 -> Star.StarType.BLUE_GIANT;
@@ -172,7 +179,7 @@ public class CalculationBody {
                         case 6 -> Star.StarType.YELLOW_DWARF;
                         default -> null;
                     };
-                    celestialBodies.add(new Star(bodyName, mass, positionX, positionY, positionZ, velocityX, velocityY, velocityZ, starType));
+                    celestialBodies.add(new Star(bodyName, mass, positionX, positionY, positionZ, velocityX, velocityY, velocityZ, radius, starType));
 
                 }
 

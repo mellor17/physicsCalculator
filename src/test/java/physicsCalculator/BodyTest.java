@@ -11,7 +11,7 @@ public class BodyTest {
     void assertThatBodyHasCorrectValuesUponCreation() {
         //basic test to ensure the constructor and object works with storing data appropriately,
         //also useful as i added the Z axis in afterward so good to test that values are in the correct order
-        Planet testBody = new Planet("Test", 100, 10, 100, 90, 90, 1000, 80, Planet.PlanetType.TERRESTRIAL);
+        Planet testBody = new Planet("Test", 100, 10, 100, 90, 90, 1000, 80,0, Planet.PlanetType.TERRESTRIAL);
         assertEquals("Test", testBody.getName());
         assertEquals(100, testBody.getMass());
         assertEquals(10, testBody.getPositionX());
@@ -25,7 +25,7 @@ public class BodyTest {
 
     @Test
     void assertThatResetForceMethodSetsAllForcesToZero() {
-        Body testBody = new Planet("Test", 10, 0, 0, 0, 0, 0, 0, null);
+        Body testBody = new Planet("Test", 10, 0, 0, 0, 0, 0, 0,0 ,Planet.PlanetType.DWARF);
 
         testBody.setNetForceX(100);
         testBody.setNetForceY(200);
