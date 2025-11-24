@@ -1,7 +1,7 @@
 package physicsCalculator;
 
-public class Star  extends  Body{
-    private StarType starType;
+public class Star extends Body{
+    private final StarType starType; // final just means it is a constant
 
     /**
      * This is a constructor this uses the variables in the class to create a new object that can be used across our programme
@@ -15,10 +15,10 @@ public class Star  extends  Body{
      * @param initial_vx
      * @param initial_vy
      * @param initial_vz
-     *
+     * @param radius
      */
-    public Star(String name, double initial_mass, double initial_x, double initial_y, double initial_z, double initial_vx, double initial_vy, double initial_vz, StarType starType) {
-        super(name, initial_mass, initial_x, initial_y, initial_z, initial_vx, initial_vy, initial_vz);
+    public Star(String name, double initial_mass, double initial_x, double initial_y, double initial_z, double initial_vx, double initial_vy, double initial_vz, double radius, StarType starType) {
+        super(name, initial_mass, initial_x, initial_y, initial_z, initial_vx, initial_vy, initial_vz, radius);
         this.starType = starType;
     }
 

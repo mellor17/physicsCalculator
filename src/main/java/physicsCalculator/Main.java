@@ -1,15 +1,9 @@
 package physicsCalculator;
 
-/**
- *
- * @see <a href="https://www.asciiart.eu/space/planets">...</a>
- *
- *
- * */
 
 public class Main {
+    // Calls the main part of the simulation
     public static void main(String[] args) {
-        Introduction.callIntroductionMethod();
-
+        CalculationBody.nBodyProblem();
     }
 }

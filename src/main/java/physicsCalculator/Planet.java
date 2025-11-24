@@ -3,11 +3,11 @@ package physicsCalculator;
 
 /**
  * Just for my understanding an extension of class makes it so that it inherits all fields (variables) and methods from
- * the original abstract class it has inherited from,
+ * the original abstract class it has inherited from
  * */
 
 public class Planet extends Body {
-    private PlanetType planetType;
+    private final PlanetType planetType;
 
     /**
      * This is a constructor this uses the variables in the class to create a new object that can be used across our programme
@@ -30,11 +30,14 @@ public class Planet extends Body {
      * velocity in y axis
      * @param initial_vz
      * velocity in z axis
+     * @param radius
+     * size of planet / distance from center to end
      * @param planetType
      * type of planet, determines factors
      */
-    public Planet(String name /*String planetType*/, double initial_mass, double initial_x, double initial_y, double initial_z, double initial_vx, double initial_vy, double initial_vz, PlanetType planetType) {
-        super(name,initial_mass, initial_x, initial_y, initial_z, initial_vx, initial_vy, initial_vz);
+
+    public Planet(String name , double initial_mass, double initial_x, double initial_y, double initial_z, double initial_vx, double initial_vy, double initial_vz,double radius , PlanetType planetType) {
+        super(name,initial_mass, initial_x, initial_y, initial_z, initial_vx, initial_vy, initial_vz, radius);
         this.planetType = planetType;
     }
 
