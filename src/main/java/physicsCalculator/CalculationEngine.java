@@ -2,57 +2,62 @@ package physicsCalculator;
 
 import java.util.ArrayList;
 
-public class  CalculationEngine {
+public class CalculationEngine {
     // the letter e is used to denote the power of 10, so
     // mass of sun would be 1.989 x 10^30kg
     public static final double gravitationalConstant = 6.674e-11;
-
+    public static boolean isFinished = false;
 
     // static just means that the objects or items within that scope are accessible without needing to instantiate a new instance
     // of the class that holds it
     public static void calculateNBodyProblem(ArrayList<Body> celestialBodies, double timeStep, double totalDuration, boolean isTesting) {
-        for (double t = 0; t < totalDuration; t += timeStep) {         // this is the time loop for each iteration of the simulation
-            for (Body body : celestialBodies) {
+        for (double currentDuration = 0; currentDuration <= totalDuration; currentDuration += timeStep) {         // this is the time loop for each iteration of the simulation
+            for (Body body : celestialBodies) { // currentDuration just means the current time in the calculator, so at the start it will be
                 body.resetForce();
             }
 
             for (int i = 0; i < celestialBodies.size(); i++) {
-                for (int j = i + 1; j < celestialBodies.size(); j++) { // adding one ensures that when running the simulation we don't calculate the same pair twice, so e.g A = B
+                for (int j = i + 1; j < celestialBodies.size(); j++) { // adding one ensures that when running the simulation we don'currentDuration calculate the same pair twice, so e.g A = B
 
                     Body bodyA = celestialBodies.get(i);
                     Body bodyB = celestialBodies.get(j);
 
-                    checkForCollisionDetection(bodyA, bodyB);
+                    if (checkForCollisionDetection(bodyA, bodyB)) {
+                        isFinished = true;
+                        break;
+                    }
                     calculateForcesAndApplyValues(bodyA, bodyB);
 
                 }
+                if (isFinished) break;
             }
 
             for (Body body : celestialBodies) {
                 body.updatePositionAndVelocityA(timeStep);
             }
+            while (!isFinished) {
+                if (!isTesting) {
+                    int printFrequency = 100;
+                    if (currentDuration == 0 || (currentDuration / timeStep) % printFrequency == 0) {
+                        System.out.printf("\u001B[35m" + "--- Time: %.0f s --- \n", currentDuration);
+                        for (Body currentBody : celestialBodies) {
+                            String color = currentBody.getColorCode();
+                            String emoji = currentBody.getEmoji();
+                            String reset = "\u001B[0m";
+                            System.out.printf("%s  %s %s Position:\n", color, emoji, currentBody.getName());
+                            System.out.printf("    X: %.4e\n", currentBody.getPositionX());
+                            System.out.printf("    Y: %.4e\n", currentBody.getPositionY());
+                            System.out.printf("    Z: %.4e\n%s", currentBody.getPositionZ(), reset);
 
-            if (!isTesting) {
-                int printFrequency = 100;
-                if (t == 0 || (t / timeStep) % printFrequency == 0) {
-                    System.out.printf("\u001B[35m" + "--- Time: %.0f s --- \n", t);
-                    for (Body currentBody : celestialBodies) {
-                        String color = currentBody.getColorCode();
-                        String emoji = currentBody.getEmoji();
-                        String reset = "\u001B[0m";
-                        System.out.printf("%s  %s %s Position:\n", color, emoji, currentBody.getName());
-                        System.out.printf("    X: %.4e\n", currentBody.getPositionX());
-                        System.out.printf("    Y: %.4e\n", currentBody.getPositionY());
-                        System.out.printf("    Z: %.4e\n%s", currentBody.getPositionZ(), reset);
-
+                        }
+                        System.out.println("---------------------");
                     }
-                    System.out.println("---------------------");
-                }
 
-                try {
-                    Thread.sleep(10); // this is used to slow down the output of the application in the console so the user can see what the output is
-                } catch (InterruptedException exception) {
-                    exception.printStackTrace(); // this is required by the sleep method if you look at the method inforamtion
+                    try {
+                        Thread.sleep(10); // this is used to slow down the output of the application in the console so the user can see what the output is
+                    } catch (InterruptedException exception) {
+                        exception.printStackTrace(); // this is required by the sleep method if you look at the method inforamtion
+                    }
                 }
             }
         }
@@ -73,7 +78,8 @@ public class  CalculationEngine {
      * Then it calculated the speed of each body by adding the velocity squared of X,Y,Z and then getting a new value of the kinetic energy of the body it is iterating over
      * by multiplying 0.5, the mass of the body and then the velocity squared or speed
      * Finally it is added to the total kinetic energy to return the value for the calculate total energy method
-     * */
+     *
+     */
 
     public static double calculateTotalKineticEnergy(ArrayList<Body> bodies) {
 
@@ -93,15 +99,15 @@ public class  CalculationEngine {
 
     /**
      * Potential Energy has the formula
-     * */
+     *
+     */
     public static double calculateTotalPotentialEnergy(ArrayList<Body> celestialBodies) {
         double totalPotentialEnergy = 0;
 
         for (int i = 0; i < celestialBodies.size(); i++) {
-            for (int j = i  + 1 ; j < celestialBodies.size(); j++) {
+            for (int j = i + 1; j < celestialBodies.size(); j++) {
                 Body bodyA = celestialBodies.get(i);
                 Body bodyB = celestialBodies.get(j);
-
 
 
                 double totalDistance = getTotalDistance(bodyB, bodyA);
@@ -122,7 +128,8 @@ public class  CalculationEngine {
      * This method takes values from each body parameter and then returns them through the total distance formula:
      * r = √x^2 * y^2 * z^2
      * Total distance =  square root of x^2 multiplied by y^2 multiplied by z^2
-     * */
+     *
+     */
     public static double getTotalDistance(Body bodyB, Body bodyA) {
         // bodyB must be first because if you take away a from b we will get a negative result, it would mean that the force acting on b is pushing it away so that is not gravity but repulsion
         double distanceX = bodyB.getPositionX() - bodyA.getPositionX();
@@ -161,7 +168,7 @@ public class  CalculationEngine {
 
     public static double calculateGravitationalForce(Body bodyA, Body bodyB) {
         double totalDistance = getTotalDistance(bodyB, bodyA);
-        return gravitationalConstant  * (bodyA.getMass() * bodyB.getMass()) / Math.pow(totalDistance, 2);
+        return gravitationalConstant * (bodyA.getMass() * bodyB.getMass()) / Math.pow(totalDistance, 2);
     }
 
 
@@ -186,19 +193,17 @@ public class  CalculationEngine {
 //
 //    }
 
-    public static void checkForCollisionDetection(Body bodyA, Body bodyB) {
+    public static boolean checkForCollisionDetection(Body bodyA, Body bodyB) {
         double totalDistance = CalculationEngine.getTotalDistance(bodyA, bodyB);
         if (totalDistance <= bodyA.getRadius() + bodyB.getRadius()) {
             System.out.printf("\u001B[31m💥 COLLISION DETECTED! 💥\n%s %s and %s %s have collided! Simulation ending!\u001B[0m\n",
-                bodyA.getEmoji(), bodyA.getName(), bodyB.getEmoji(), bodyB.getName());
-            System.exit(500);
-
-
+                    bodyA.getEmoji(), bodyA.getName(), bodyB.getEmoji(), bodyB.getName());
+            return true;
+        } else {
+            return false;
         }
 
     }
-
-
 
 
 }

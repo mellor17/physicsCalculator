@@ -3,7 +3,6 @@ package physicsCalculator;
 
 // the abstract keyword makes it so that this is a template for our planet and star classes
 public abstract class Body {
-//TODO: Write two extended classes for a star and planet to accomplish Advanced OO and Inheritance, add more tests for the methods in Engine, add interfaces and inheritance for advanced OOP
     // this declares the variables we need to use in the N-body formula
     private final String name;
     private final double mass;
@@ -128,55 +127,62 @@ public abstract class Body {
     }
 
     /**
-     * @link site i found this on <a href="https://www.geeksforgeeks.org/java/how-to-print-colored-text-in-java-console/">...</a>
+     * This is a helper method which use ANSI colour code to recolour bodies based on
+     * Found this information from this site:
+     * @link  <a href="https://www.geeksforgeeks.org/java/how-to-print-colored-text-in-java-console/">...</a>
      * */
+
+
     public String getColorCode() {
         String nameLower = name.toLowerCase();
+        String[] colourCodes = {"\u001B[33m", "\u001B[34m", "\u001B[31m", "\u001B[38;5;208m", "\u001B[38;5;220m", "\u001B[38;5;214m", "\u001B[37m", "\u001B[36m", "\u001B[34m"};
+
         if (nameLower.contains("sun")) {
-            return "\u001B[33m"; // Yellow
+            return colourCodes[0]; // Yellow
         } else if (nameLower.contains("earth")) {
-            return "\u001B[34m"; // Blue
+            return colourCodes[1]; // Blue
         } else if (nameLower.contains("mars")) {
-            return "\u001B[31m"; // Red
+            return colourCodes[2]; // Red
         } else if (nameLower.contains("jupiter")) {
-            return "\u001B[38;5;208m"; // orange
+            return colourCodes[3]; // orange
         } else if (nameLower.contains("saturn")) {
-            return "\u001B[38;5;220m"; // gold
+            return colourCodes[4]; // gold
         } else if (nameLower.contains("venus")) {
-            return "\u001B[38;5;214m"; // orange-yellow
-        } else if (nameLower.contains("mercury")) {
-            return "\u001B[37m"; // White
+            return colourCodes[5]; // orange-yellow
+        } else if (nameLower.contains("mercury") || nameLower.contains("moon")) {
+            return colourCodes[6]; // White
         } else if (nameLower.contains("uranus")) {
-            return "\u001B[36m"; // Cyan
+            return colourCodes[7]; // Cyan
         } else if (nameLower.contains("neptune")) {
-            return "\u001B[34m"; // Blue
+            return colourCodes[8]; // Blue
         } else {
-            return "";
+            return colourCodes[(int) Math.abs(Math.random() * colourCodes.length)]; // just returns any random colour if name not found
         }
     }
 
     public String getEmoji() {
         String nameLower = name.toLowerCase();
+        String[] emojiArray = {"☀️", "🌍","🔴", "🟠", "🪐", "🌕", "⚪️", "🔵", "🌙"};
         if (nameLower.contains("sun")) {
-            return "☀️";
+            return emojiArray[0];
         } else if (nameLower.contains("earth")) {
-            return "🌍";
+           return emojiArray[1];
         } else if (nameLower.contains("mars")) {
-            return "🔴";
+            return emojiArray[2];
         } else if (nameLower.contains("jupiter")) {
-            return "🟠";
+            return emojiArray[3];
         } else if (nameLower.contains("saturn")) {
-            return "🪐";
+            return emojiArray[4];
         } else if (nameLower.contains("venus")) {
-            return "🌕";
+            return emojiArray[5];
         } else if (nameLower.contains("mercury")) {
-            return "⚪️";
+            return emojiArray[6];
         } else if (nameLower.contains("uranus")) {
-            return "🔵";
+            return emojiArray[7];
         } else if (nameLower.contains("neptune")) {
-            return "🔵";
+            return emojiArray[7];
         } else if (nameLower.contains("moon")) {
-            return "🌙";
+            return emojiArray[8];
         } else {
             return "";
         }
