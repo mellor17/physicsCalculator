@@ -116,22 +116,25 @@ The project includes JUnit tests in `CalculationTest.java`:
 <br>
 
 ### Definitions
-# TODO: ADD MORE DEFINITIONS AND DETAIL!!!!!!!!!!!!!!!!!
 - **Numerical Integration**: This is a way to solve problems _(differential equations)_ with no defined _closed form analytical solution,_ as N > 3 has no defined analytical solution we must approximate by changing the values we need to compute each time then update the values we are looking for.
   - **Closed-Form Analytical Solution**: This is an exact formula we can write using a set of defined functions which can be figured out in a single expression
   - **Differential Equations**: These are equations that allow us to find how something changes (derivatives) of the values we plug into our equations over time
 - **Euler Method**: The Euler method is the most basic form of numerical integration used to solve differential equations. It works by taking a small time step (∆t) and updating the value using the current rate of change given by the derivative. The larger the time step, the more inaccurate the result becomes, because Euler assumes the rate of change stays constant during each step.
-- **Sigma symbol:** $\sum_{i}$ - This similar to a for loop and produces a summative result 
+- **Sigma symbol:** $\sum_{i}$ - This similar to a for loop and produces a summative result (just means adding everything in the loop up)
 
-### Rocket Trajectory Simulator
+[//]: # (### Rocket Trajectory Simulator)
 
-#### **NOT YET IMPLEMENTED**
+[//]: # ()
+[//]: # (#### **NOT YET IMPLEMENTED**)
 
-### Nuclear Decay Simulator
+[//]: # ()
+[//]: # (### Nuclear Decay Simulator)
 
-#### **NOT YET IMPLEMENTED**
+[//]: # ()
+[//]: # (#### **NOT YET IMPLEMENTED**)
 
-### Gravitational Lensing Calculator
+[//]: # ()
+[//]: # (### Gravitational Lensing Calculator)
 
-
-#### **NOT YET IMPLEMENTED**
+[//]: # ()
+[//]: # (#### **NOT YET IMPLEMENTED**)
