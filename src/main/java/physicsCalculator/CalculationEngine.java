@@ -35,7 +35,7 @@ public class CalculationEngine {
             for (Body body : celestialBodies) {
                 body.updatePositionAndVelocityA(timeStep);
             }
-            while (!isFinished) {
+//            while (!isFinished) {
                 if (!isTesting) {
                     int printFrequency = 100;
                     if (currentDuration == 0 || (currentDuration / timeStep) % printFrequency == 0) {
@@ -59,7 +59,7 @@ public class CalculationEngine {
                         exception.printStackTrace(); // this is required by the sleep method if you look at the method inforamtion
                     }
                 }
-            }
+//            }
         }
     }
 
@@ -204,6 +204,7 @@ public class CalculationEngine {
         }
 
     }
+
 
 
 }

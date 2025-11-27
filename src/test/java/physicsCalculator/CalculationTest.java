@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static physicsCalculator.CalculationBody.*; // uses the static variables in calculation body for our tests
-import static physicsCalculator.CalculationEngine.gravitationalConstant;
 
 /**
  * Due to the nature of the n-body problem it is difficult to get specifically accurate figures when testing the system,
@@ -33,7 +32,7 @@ public class CalculationTest {
         // Total energy should be equal to kinetic + potential energy
         assertEquals(kineticEnergy + potentialEnergy, totalEnergy, 1e10);
 
-        // For a stable orbit, total energy should be negative (bound system)
+        // For a stable orbit, total energy should be negative
         assertTrue(totalEnergy < 0);
     }
 
@@ -59,11 +58,12 @@ public class CalculationTest {
         assertTrue(actualKineticEnergy >= 0);
     }
 
-    /***/
+
     @Test
     void assertThatPotentialEnergyCalculationsReturnCorrectValues() {
         ArrayList<Body> testBodies = new ArrayList<>();
-        // PE = -G * (m1 * m2)
+        // PE = -G * (m1 * m2) / r
+        // potential energy = negative gravitational constant multiplied by (mass1 times mass 2) then divided by total distance
         double mass1 = 1.0e20;
         double mass2 = 1.0e20;
         double distance = 1.0e10;
@@ -75,12 +75,12 @@ public class CalculationTest {
         testBodies.add(body2);
 
         // Expected PE = -6.674e-11 * (1e20 * 1e20) / 1e10 = -6.674e19
-        double expectedPotentialEnergy = gravitationalConstant * (mass1 * mass2) / distance;
+        double expectedPotentialEnergy = -6.674e-11 * (mass1 * mass2) / distance;
         double actualPotentialEnergy = CalculationEngine.calculateTotalPotentialEnergy(testBodies);
 
         assertEquals(expectedPotentialEnergy, actualPotentialEnergy, 1e10);
 
-        // Gravitational potential energy should always be negative or zero
+        // Gravitational potential energy should always be negative or zero as for one we have G which is negative in the GPE equation and two potential e
         System.out.println(actualPotentialEnergy);
         System.out.println(expectedPotentialEnergy);
         assertTrue(actualPotentialEnergy <= 0);
@@ -115,7 +115,7 @@ public class CalculationTest {
     @Test
     void testConservationOfEnergyWithThreeBodies() {
         ArrayList<Body> testBodies = new ArrayList<>();
-        Body sun = new Star("Sun",massOfSun, 0, 0, 0, 0, 0, 0,radiusOfSun, Star.StarType.YELLOW_DWARF    );
+        Body sun = new Star("Sun",massOfSun, 0, 0, 0, 0, 0, 0,radiusOfSun, Star.StarType.YELLOW_DWARF  );
         // initial velocity y for earth is the average speed is 29,780 is m/s
         Body earth = new Planet("Earth", massOfEarth, 1.496e11, 0, 0, 0, 29780, 0,radiusOfEarth, Planet.PlanetType.TERRESTRIAL);
         // initial velocity y for mars is the average speed is 24,070 is m/s a little slower than the earth due to its smaller size and it being further away from the sun hence the slower orbit

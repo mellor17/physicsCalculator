@@ -9,6 +9,8 @@ public class CalculationBody {
 
     /**
      * global variables or 'fields'
+     * Also, these are approximations for time not exact figures, a year in seconds as been rounded up
+     * The radii should be fairly accurate however
      */
     static final double massOfSun = 1.989e30;
     static final double massOfEarth = 5.972e24;
@@ -204,8 +206,33 @@ public class CalculationBody {
         return randomMessages[randNum];
     }
 
-    public static String timeConversionMethod(int seconds) {
-        return String.valueOf(seconds);
+    public static String timeConversionMethod(int totalDuration, int seconds) {
+        //
+        // idea here is to change seconds into minutes, hours, then days, weeks, months years etc
+        StringBuilder stringBuilder = new StringBuilder();
+        double totalSeconds = seconds;
+        int numberOfYears = 0;
+        int numberOfMonths = 0;
+        int numberOfWeeks = 0;
+        int numberOfDays = 0;
+        int numberOfHours = 0;
+        int number0fMinutes = 0;
+
+        while (totalSeconds > totalDuration) {
+
+
+            if (seconds > yearInSeconds) {
+                number0fMinutes++;
+                totalSeconds += seconds;
+                return String.valueOf(seconds);
+            } else if (seconds > (yearInSeconds / 12)) {
+                numberOfMonths++;
+                totalSeconds += seconds;
+            } else if (seconds > (yearInSeconds / 52))
+                return String.valueOf(seconds);
+        }
+
+        return "";
     }
 
 }
