@@ -1,9 +1,11 @@
 package physicsCalculator;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 import static physicsCalculator.CalculationEngine.isFinished;
 import static physicsCalculator.InputUtility.scanner;
+
 
 public class CalculationBody {
 
@@ -32,7 +34,7 @@ public class CalculationBody {
         while (!isFinished) {
             System.out.println("The N-body problem, in celestial mechanics, is predicting the motions of any number of masses (N) under mutual gravitational attraction, given their initial positions, velocities, and masses.");
             System.out.println("""
-                    Select a simulation, or choose your own:");
+                    Select a simulation, or choose your own:
                     1: Sun and Earth (Two-body)
                     2: Sun, Earth, and Mars (Three-body)
                     3: Choose your own simulation. (N-body)
@@ -51,7 +53,7 @@ public class CalculationBody {
                 celestialBodies.add(sun);
                 celestialBodies.add(earth);
 
-                CalculationEngine.calculateNBodyProblem(celestialBodies, 60, 31_536_000, false);
+                CalculationEngine.calculateNBodyProblem(celestialBodies, 180, oneMonthInSeconds, false);
 
             } else if (presetChoice == 2) {
                 Body sun = new Star("Sun", massOfSun, 0, 0, 0, 0, 0, 0, radiusOfSun, Star.StarType.YELLOW_DWARF);
@@ -114,8 +116,7 @@ public class CalculationBody {
 
 
                     System.out.println("--- Body: " + bodyName + " ---");
-
-
+                    //TODO: Implement try catch blocks for user input, if for e.g they implement a string or char
                     System.out.print("Mass (kg): ");
                     double mass = scanner.nextDouble();
 
@@ -143,6 +144,7 @@ public class CalculationBody {
                     System.out.println("Is your body a Planet (1) or Star (2)?");
                     int objectType = scanner.nextInt();
                     scanner.nextLine();
+
                     if (objectType == 1) {
                         System.out.println("""
                                 What is the type of the planet?
@@ -187,52 +189,124 @@ public class CalculationBody {
                         celestialBodies.add(new Star(bodyName, mass, positionX, positionY, positionZ, velocityX, velocityY, velocityZ, radius, starType));
 
                     }
-
                     if (numberOfBodies > 1) {
                         System.out.println("-------- NEXT BODY --------");
                     }
 
-
                 }
                 CalculationEngine.calculateNBodyProblem(celestialBodies, timeStep, totalTime, false);
+                System.out.println("Are you fins");
             }
         }
     }
 
 
+    //plays when the simulation ends
     public static String randomMessageGenerator() {
         String[] randomMessages = {"Thank you for joining my program—can’t wait to have you back soon!", "Appreciate you being part of my program; hope we cross paths again soon!", "Thanks for taking part in my program; looking forward to seeing you again!", "Thanks for being here—hope to welcome you back to the program soon!", "Grateful you joined the program; I hope we get to do this again soon!", "Thanks for sticking with it—consider this your official permission to skive off home until next time.", "You were brilliant—almost suspiciously so. Pop back in before we start missing you.", "Right, that’s the lot mind how you go, and come back before my processors run out."};
         int randNum = (int) (Math.random() * randomMessages.length);
         return randomMessages[randNum];
     }
 
-    public static String timeConversionMethod(int totalDuration, int seconds) {
-        //
-        // idea here is to change seconds into minutes, hours, then days, weeks, months years etc
-        StringBuilder stringBuilder = new StringBuilder();
-        double totalSeconds = seconds;
-        int numberOfYears = 0;
-        int numberOfMonths = 0;
-        int numberOfWeeks = 0;
-        int numberOfDays = 0;
-        int numberOfHours = 0;
-        int number0fMinutes = 0;
+    /**
+     * Converts seconds counter in engine into a much more readable format
+     * Example: 31_536_000 should = 1 year
+     * / here we divide the time by the total time left and cast it as an integer so we get the whole figure of the number of years for example
+     * this same logic is repeated throughout so we can have the whole number of the time measurement barring seconds
+     */
+    public static String timeConversionMethod(double seconds) {
+        String result = "";
 
-        while (totalSeconds > totalDuration) {
+        // this will be used on the total duration of our engine to then return a string with years, months weeks and days
+        double timeLeft = seconds;
 
+        int years = (int) (timeLeft / yearInSeconds);
+        timeLeft = timeLeft - (years * yearInSeconds);
 
-            if (seconds > yearInSeconds) {
-                number0fMinutes++;
-                totalSeconds += seconds;
-                return String.valueOf(seconds);
-            } else if (seconds > (yearInSeconds / 12)) {
-                numberOfMonths++;
-                totalSeconds += seconds;
-            } else if (seconds > (yearInSeconds / 52))
-                return String.valueOf(seconds);
+        int months = (int) (timeLeft / oneMonthInSeconds);
+        timeLeft = timeLeft - (months / oneMonthInSeconds);
+
+        int weeks = (int) (timeLeft / 604800);
+        timeLeft = timeLeft - (weeks * 604800);
+
+        int days = (int) (timeLeft / 86400);
+        timeLeft = timeLeft - (days * 86400);
+        
+
+        int hours = (int) (timeLeft / 3600);
+        timeLeft = timeLeft - (hours * 3600);
+        
+        int minutes = (int) (timeLeft / 60);
+        timeLeft = timeLeft - (minutes * 60);
+        
+        int secs = (int) timeLeft;
+
+        if (years > 0) {
+            if (years == 1) {
+                result = result + years + " year, ";
+            } else {
+                result = result + years + " years, ";
+            }
         }
+        if (months > 0) {
+            if (months == 1) {
+                result = result + months + " month, ";
+            } else {
+                result = result + months + " months, ";
+            }
+        }
+        if (weeks > 0) {
+            if (weeks == 1) {
+                result = result + weeks + " week, ";
+            } else {
+                result = result + weeks + " weeks, ";
+            }
 
-        return "";
+        }
+        if (days > 0) {
+            if (days == 1) {
+                result = result + days + " day, ";
+
+            } else {
+                result = result + days + " days, ";
+            }
+        }
+        if (hours > 0) {
+            if (hours == 1) {
+                result = result + hours + " hour, ";
+            } else {
+                result = result + hours + " hours, ";
+
+            }
+        }
+        if (minutes > 0) {
+            if (minutes == 1) {
+                result = result + minutes + " minute, ";
+            } else {
+                result = result + minutes + " minutes, ";
+            }
+        }
+        if (secs > 0) {
+            if (secs == 1) {
+                result = result + secs + " second";
+            } else {
+                result = result + secs + " seconds";
+
+            }
+        }
+        
+        if (result.endsWith(", ")) { // this just checks if we have trailing commas at the end and removes that plus whitespace
+            result = result.substring(0, result.length() - 2);
+        }
+        
+        if (result.equals("")) {
+            result = "0 seconds";
+        }
+        
+        return result;
     }
+
+//
+//    public void handleExceptions()
 
 }
