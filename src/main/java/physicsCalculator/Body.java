@@ -3,7 +3,7 @@ package physicsCalculator;
 
 // the abstract keyword makes it so that this is a template for our planet and star classes
 public abstract class Body {
-    // this declares the variables we need to use in the N-body formula
+    // this declares the variables(fields when in a class) we need to use in the N-body formula
     private final String name;
     private final double mass;
     private double positionX, positionY, positionZ;
@@ -31,6 +31,7 @@ public abstract class Body {
         this.radius = radius;
     }
 
+    // these are getters and setter for our fields, this is how OOP is supposed to work so no other methods can alter our variables accidentally
     public String getName() {
         return name;
     }
@@ -75,6 +76,10 @@ public abstract class Body {
         return netForceZ;
     }
 
+    public double getRadius() {
+        return radius;
+    }
+
     public void setNetForceX(double netForceX) {
         this.netForceX = netForceX;
     }
@@ -93,9 +98,7 @@ public abstract class Body {
         netForceZ = 0;
     }
 
-    public double getRadius() {
-        return radius;
-    }
+
 
     public void updateNetForce(double forceX, double forceY, double forceZ) {
         netForceX += forceX;
@@ -126,23 +129,26 @@ public abstract class Body {
         this.positionZ += this.velocityZ * timeStep;
     }
 
+
     /**
-     * This is a helper method which use ANSI colour code to recolour bodies based on
+     *
+     * The reason why these methods are in the body class is because i feel like it is easier to access them in the engine and body because then we don't have to pass parms
+     * each time the method is called
+     * This is a helper method which use ANSI colour code to recolour bodies based on the type of planet
      * Found this information from this site:
      * @link  <a href="https://www.geeksforgeeks.org/java/how-to-print-colored-text-in-java-console/">...</a>
+     *
      * */
-
-
     public String getColorCode() {
         String nameLower = name.toLowerCase();
         String[] colourCodes = {"\u001B[33m", "\u001B[34m", "\u001B[31m", "\u001B[38;5;208m", "\u001B[38;5;220m", "\u001B[38;5;214m", "\u001B[37m", "\u001B[36m", "\u001B[34m"};
 
         if (nameLower.contains("sun")) {
-            return colourCodes[0]; // Yellow
+            return colourCodes[0]; // yellow
         } else if (nameLower.contains("earth")) {
-            return colourCodes[1]; // Blue
+            return colourCodes[1]; // blue
         } else if (nameLower.contains("mars")) {
-            return colourCodes[2]; // Red
+            return colourCodes[2]; // red
         } else if (nameLower.contains("jupiter")) {
             return colourCodes[3]; // orange
         } else if (nameLower.contains("saturn")) {
@@ -150,16 +156,18 @@ public abstract class Body {
         } else if (nameLower.contains("venus")) {
             return colourCodes[5]; // orange-yellow
         } else if (nameLower.contains("mercury") || nameLower.contains("moon")) {
-            return colourCodes[6]; // White
+            return colourCodes[6]; // white
         } else if (nameLower.contains("uranus")) {
-            return colourCodes[7]; // Cyan
+            return colourCodes[7]; // cyan
         } else if (nameLower.contains("neptune")) {
-            return colourCodes[8]; // Blue
+            return colourCodes[8]; // blue
         } else {
             return colourCodes[(int) Math.abs(Math.random() * colourCodes.length)]; // just returns any random colour if name not found
         }
     }
 
+    //NOTE: IF YOU ARE RUNNING ON A WINDOW COMPUTER THEN THESE MIGHT NOT DISPLAY AS CMD PROMPT CANNOT DISPLAY EMOJIS!!!!!!
+    // if not then you are ok :)
     public String getEmoji() {
         String nameLower = name.toLowerCase();
         String[] emojiArray = {"☀️", "🌍","🔴", "🟠", "🪐", "🌕", "⚪️", "🔵", "🌙"};

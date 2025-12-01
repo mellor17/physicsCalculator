@@ -41,4 +41,12 @@ public class BodyTest {
 
     }
 
+
+    @Test
+    void assertThatAYearInSecondsReturns1YearInString() {
+        String result = CalculationBody.timeConversionMethod(31_536_000);
+        String expected = "1 year";
+        assertEquals(expected, result);
+    }
+
 }

@@ -39,7 +39,10 @@ public class CalculationEngine {
                 if (!isTesting) {
                     int printFrequency = 100;
                     if (currentDuration == 0 || (currentDuration / timeStep) % printFrequency == 0) {
-                        System.out.printf("\u001B[35m" + "--- Time: %.0f s --- \n", currentDuration);
+
+
+                        //TODO: Write simulation results to file with date prefixed or affixed
+                        System.out.printf("\u001B[35m" + "--- Time: %s --- \n", CalculationBody.timeConversionMethod(currentDuration));
                         for (Body currentBody : celestialBodies) {
                             String color = currentBody.getColorCode();
                             String emoji = currentBody.getEmoji();
@@ -54,7 +57,7 @@ public class CalculationEngine {
                     }
 
                     try {
-                        Thread.sleep(10); // this is used to slow down the output of the application in the console so the user can see what the output is
+                        Thread.sleep(5); // this is used to slow down the output of the application in the console so the user can see what the output is
                     } catch (InterruptedException exception) {
                         exception.printStackTrace(); // this is required by the sleep method if you look at the method inforamtion
                     }
