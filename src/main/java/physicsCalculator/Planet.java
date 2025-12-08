@@ -33,7 +33,7 @@ public class Planet extends Body {
      * @param radius
      * size of planet / distance from center to end
      * @param planetType
-     * type of planet, determines factors
+     * what type of planet it is and its properties
      */
 
     public Planet(String name , double initial_mass, double initial_x, double initial_y, double initial_z, double initial_vx, double initial_vy, double initial_vz,double radius , PlanetType planetType) {

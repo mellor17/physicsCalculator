@@ -63,6 +63,7 @@ public class CalculationTest {
     void assertThatPotentialEnergyCalculationsReturnCorrectValues() {
         ArrayList<Body> testBodies = new ArrayList<>();
         // PE = -G * (m1 * m2) / r
+        // U is also sometimes used to denote potential energy
         // potential energy = negative gravitational constant multiplied by (mass1 times mass 2) then divided by total distance
         double mass1 = 1.0e20;
         double mass2 = 1.0e20;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 
 import static physicsCalculator.CalculationEngine.isFinished;
+import static physicsCalculator.CalculationEngine.watchSimulation;
 import static physicsCalculator.InputUtility.scanner;
 
 
@@ -47,6 +48,7 @@ public class CalculationBody {
             System.out.println("------------------------------------------------");
 
             if (presetChoice == 1) {
+                watchSimulationCheck();
                 Body sun = new Star("Sun", massOfSun, 0, 0, 0, 0, 0, 0, radiusOfSun, Star.StarType.YELLOW_DWARF); // initial velocity y for earth is the average speed is 29,780 is m/s
                 Body earth = new Planet("Earth", massOfEarth, 1.496e11, 0, 0, 0, 29780, 0, radiusOfEarth, Planet.PlanetType.TERRESTRIAL); // initial x is the average distance from the earth to the sun, which is an astronomical unit (AU)
 
@@ -56,6 +58,7 @@ public class CalculationBody {
                 CalculationEngine.calculateNBodyProblem(celestialBodies, 180, oneMonthInSeconds, false);
 
             } else if (presetChoice == 2) {
+                watchSimulationCheck();
                 Body sun = new Star("Sun", massOfSun, 0, 0, 0, 0, 0, 0, radiusOfSun, Star.StarType.YELLOW_DWARF);
                 Body earth = new Planet("Earth", massOfEarth, 1.496e11, 0, 0, 0, 29780, 0, radiusOfEarth, Planet.PlanetType.TERRESTRIAL);
                 Body mars = new Planet("Mars", massOfMars, 2.279e11, 0, 0, 0, 24070, 0, radiusOfMars, Planet.PlanetType.TERRESTRIAL);
@@ -66,6 +69,7 @@ public class CalculationBody {
                 CalculationEngine.calculateNBodyProblem(celestialBodies, 60, 31_536_000, false);
 
             } else if (presetChoice == 3) {
+                watchSimulationCheck();
                 System.out.print("Enter the number of bodies (N): ");
                 int numberOfBodies = scanner.nextInt();
 
@@ -116,7 +120,7 @@ public class CalculationBody {
 
 
                     System.out.println("--- Body: " + bodyName + " ---");
-                    //TODO: Implement try catch blocks for user input, if for e.g they implement a string or char
+
                     System.out.print("Mass (kg): ");
                     double mass = scanner.nextDouble();
 
@@ -156,8 +160,7 @@ public class CalculationBody {
                         int planetTypeChoice = scanner.nextInt();
                         scanner.nextLine();
                         Planet.PlanetType planetType = switch (planetTypeChoice) {
-                            case 1 ->
-                                    Planet.PlanetType.GAS_GIANT; // the reason why i have to access them like this is because enums cannot be instantiated, so I have to call it each time like this to access variables within enum
+                            case 1 -> Planet.PlanetType.GAS_GIANT; // the reason why i have to access them like this is because enums cannot be instantiated, so I have to call it each time like this to access variables within enum
                             case 2 -> Planet.PlanetType.TERRESTRIAL;
                             case 3 -> Planet.PlanetType.DWARF;
                             case 4 -> Planet.PlanetType.ICE_GIANT;
@@ -195,7 +198,7 @@ public class CalculationBody {
 
                 }
                 CalculationEngine.calculateNBodyProblem(celestialBodies, timeStep, totalTime, false);
-                System.out.println("Are you fins");
+
             }
         }
     }
@@ -203,7 +206,7 @@ public class CalculationBody {
 
     //plays when the simulation ends
     public static String randomMessageGenerator() {
-        String[] randomMessages = {"Thank you for joining my program—can’t wait to have you back soon!", "Appreciate you being part of my program; hope we cross paths again soon!", "Thanks for taking part in my program; looking forward to seeing you again!", "Thanks for being here—hope to welcome you back to the program soon!", "Grateful you joined the program; I hope we get to do this again soon!", "Thanks for sticking with it—consider this your official permission to skive off home until next time.", "You were brilliant—almost suspiciously so. Pop back in before we start missing you.", "Right, that’s the lot mind how you go, and come back before my processors run out."};
+        String[] randomMessages = {"Thank you for joining my programme—can’t wait to have you back soon!", "Appreciate you being part of my program; hope we cross paths again soon!", "Thanks for taking part in my programme; looking forward to seeing you again!", "Thanks for being here—hope to welcome you back to the programme soon!", "Grateful you joined the programme; I hope we get to do this again soon!", "Thanks for sticking with it—consider this your official permission to skive off home until next time.", "You were brilliant—almost suspiciously so. Pop back in before we start missing you.", "Right, that’s the lot mind how you go, and come back before my processors run out."};
         int randNum = (int) (Math.random() * randomMessages.length);
         return randomMessages[randNum];
     }
@@ -242,68 +245,52 @@ public class CalculationBody {
         int secs = (int) timeLeft;
 
         if (years > 0) {
-            if (years == 1) {
-                result = result + years + " year, ";
-            } else {
-                result = result + years + " years, ";
-            }
+            result = result + years + (years == 1 ? " year, " : " years, "); // this uses a ternary operator which is just essentially a shorthand if statement
         }
         if (months > 0) {
-            if (months == 1) {
-                result = result + months + " month, ";
-            } else {
-                result = result + months + " months, ";
-            }
+            result = result + months + (months == 1 ? " month, " : " months, ");
         }
         if (weeks > 0) {
-            if (weeks == 1) {
-                result = result + weeks + " week, ";
-            } else {
-                result = result + weeks + " weeks, ";
-            }
-
+            result = result + weeks + (weeks == 1 ? " week, " : " weeks, ");
         }
         if (days > 0) {
-            if (days == 1) {
-                result = result + days + " day, ";
-
-            } else {
-                result = result + days + " days, ";
-            }
+            result = result + days + (days == 1 ? " day, " : " days ");
         }
         if (hours > 0) {
-            if (hours == 1) {
-                result = result + hours + " hour, ";
-            } else {
-                result = result + hours + " hours, ";
+            result = result + hours + (hours == 1 ? " hour, " : " hours, ");
 
-            }
         }
         if (minutes > 0) {
-            if (minutes == 1) {
-                result = result + minutes + " minute, ";
-            } else {
-                result = result + minutes + " minutes, ";
-            }
+            result = result + minutes + (minutes == 1 ? " minute, " : " minutes, ");
+
         }
         if (secs > 0) {
-            if (secs == 1) {
-                result = result + secs + " second";
-            } else {
-                result = result + secs + " seconds";
-
-            }
+            result = result + secs + (secs == 1 ? " second, " : " seconds, ");
         }
         
         if (result.endsWith(", ")) { // this just checks if we have trailing commas at the end and removes that plus whitespace
             result = result.substring(0, result.length() - 2);
         }
         
-        if (result.equals("")) {
+        if (result.equals("")) { // used to check whether time is empty
             result = "0 seconds";
         }
         
         return result;
+    }
+
+    public static void watchSimulationCheck() {
+        System.out.println("Would you like to watch the simulation print out (1) or have it finish instantly?(2)");
+        int response = scanner.nextInt();
+        try {
+            if (response == 1) {
+                watchSimulation = true;
+            } else if (response == 2) {
+                watchSimulation = false;
+            }
+        } catch (Exception e) {
+            System.out.println("Invalid input, please try again.");
+        }
     }
 
 //

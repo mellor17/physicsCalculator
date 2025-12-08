@@ -38,7 +38,15 @@ public class BodyTest {
 
     @Test
     void assertThatInitialCoordinatesXYZAreCorrect() {
-
+        double expectedX = 150.5;
+        double expectedY = 200.75;
+        double expectedZ = 300.25;
+        
+        Body testBody = new Planet("TestPlanet", 1000, 150.5, 200.75, 300.25, 0, 0, 0, 50, Planet.PlanetType.TERRESTRIAL);
+        
+        assertEquals(expectedX, testBody.getPositionX());
+        assertEquals(expectedY, testBody.getPositionY());
+        assertEquals(expectedZ, testBody.getPositionZ());
     }
 
 

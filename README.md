@@ -59,7 +59,8 @@ The project includes JUnit tests in `CalculationTest.java`:
 - **Collision Detection**: Detects when bodies collide based on their radii
 - **3D Space Simulation**: Full three-dimensional position and velocity tracking with orbital inclinations
 - **Full Test suite**: JUnit tests created following TDD 
-- **Euler Method**: Uses the most basic method at the moment which becomes proportionally worse dependent on the step size in the simulation
+- **Euler Method**: Uses the most basic numerical integration method at the moment which becomes proportionally worse dependent on the step size in the simulation
+  - NOTE: Numerical Integration is just a way to solve equations, the Euler Method is just the way the equation is being solved
 
 
 ## Upcoming Features
@@ -118,7 +119,7 @@ This simulator uses the **Euler method** for numerical integration:
 The simulator validates physical accuracy by checking conservation of total energy:
 - **Kinetic Energy**: $KE = \frac{1}{2}mv^2$
 - **Potential Energy**: $PE = -G\frac{m_1 m_2}{r}$
-- Usage within the Loop:
+  - Usage within the For Loop:
 
 $U_{total} = \sum_{i} \sum_{j > i} -G \frac{m_i m_j}{r_{ij}}$
 
