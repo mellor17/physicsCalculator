@@ -67,18 +67,19 @@ public class CalculationEngine {
                         }
                     }
 
-
-
                 }
 
         }
-        scanner.nextLine();
-        System.out.println("Are you finished simulating? (Y/N)");
-        String finishedResponse = scanner.nextLine();
-        if (finishedResponse.toLowerCase().contains("y")) {
-            System.out.println(CalculationBody.randomMessageGenerator());
-            isFinished = true;
+        if (!isTesting) {
+            scanner.nextLine(); // this is used to consume input buffer from watch sim check
+            System.out.println("Are you finished simulating? (Y/N)");
+            String finishedResponse = scanner.nextLine();
+            if (finishedResponse.toLowerCase().contains("y")) {
+                System.out.println(CalculationBody.randomMessageGenerator());
+                isFinished = true;
+            }
         }
+
     }
 
     // Takes both results from the energy methods and adds them together, used to test conservation of energy
