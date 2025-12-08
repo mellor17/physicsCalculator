@@ -2,40 +2,43 @@ package physicsCalculator;
 
 import java.util.ArrayList;
 
+import static physicsCalculator.InputUtility.scanner;
+
 public class CalculationEngine {
     // the letter e is used to denote the power of 10, so
     // mass of sun would be 1.989 x 10^30kg
     public static final double gravitationalConstant = 6.674e-11;
     public static boolean isFinished = false;
+    public static boolean watchSimulation = false;
 
     // static just means that the objects or items within that scope are accessible without needing to instantiate a new instance
     // of the class that holds it
     public static void calculateNBodyProblem(ArrayList<Body> celestialBodies, double timeStep, double totalDuration, boolean isTesting) {
         for (double currentDuration = 0; currentDuration <= totalDuration; currentDuration += timeStep) {         // this is the time loop for each iteration of the simulation
+            if (isFinished) break;
             for (Body body : celestialBodies) { // currentDuration just means the current time in the calculator, so at the start it will be
                 body.resetForce();
             }
 
+
+            //This loop works by iterating over i first
             for (int i = 0; i < celestialBodies.size(); i++) {
-                for (int j = i + 1; j < celestialBodies.size(); j++) { // adding one ensures that when running the simulation we don'currentDuration calculate the same pair twice, so e.g A = B
+                for (int j = i + 1; j < celestialBodies.size(); j++) { // adding one ensures that when running the simulation we don't calculate the same pair twice, so e.g A = B
 
                     Body bodyA = celestialBodies.get(i);
                     Body bodyB = celestialBodies.get(j);
 
                     if (checkForCollisionDetection(bodyA, bodyB)) {
                         isFinished = true;
-                        break;
                     }
                     calculateForcesAndApplyValues(bodyA, bodyB);
 
                 }
-                if (isFinished) break;
             }
 
             for (Body body : celestialBodies) {
                 body.updatePositionAndVelocityA(timeStep);
             }
-//            while (!isFinished) {
                 if (!isTesting) {
                     int printFrequency = 100;
                     if (currentDuration == 0 || (currentDuration / timeStep) % printFrequency == 0) {
@@ -56,13 +59,25 @@ public class CalculationEngine {
                         System.out.println("---------------------");
                     }
 
-                    try {
-                        Thread.sleep(5); // this is used to slow down the output of the application in the console so the user can see what the output is
-                    } catch (InterruptedException exception) {
-                        exception.printStackTrace(); // this is required by the sleep method if you look at the method inforamtion
+                    if (watchSimulation) {
+                        try {
+                            Thread.sleep(5); // this is used to slow down the output of the application in the console so the user can see what the output is otherwise it finishes instantly
+                        } catch (InterruptedException exception) {
+                            exception.printStackTrace(); // this is required by the sleep method if you look at the method inforamtion
+                        }
                     }
+
+
+
                 }
-//            }
+
+        }
+        scanner.nextLine();
+        System.out.println("Are you finished simulating? (Y/N)");
+        String finishedResponse = scanner.nextLine();
+        if (finishedResponse.toLowerCase().contains("y")) {
+            System.out.println(CalculationBody.randomMessageGenerator());
+            isFinished = true;
         }
     }
 
@@ -83,7 +98,6 @@ public class CalculationEngine {
      * Finally it is added to the total kinetic energy to return the value for the calculate total energy method
      *
      */
-
     public static double calculateTotalKineticEnergy(ArrayList<Body> bodies) {
 
         double totalKineticEnergy = 0;
@@ -101,14 +115,15 @@ public class CalculationEngine {
 
 
     /**
-     * Potential Energy has the formula
-     *
+     * Potential Energy has the formula:
+     * U = -G * (m₁ * m₂) / r
+     * Potential Energy = negative gravitational constant multiplied by (mass 1 * mass 2) divided by total distance
      */
     public static double calculateTotalPotentialEnergy(ArrayList<Body> celestialBodies) {
         double totalPotentialEnergy = 0;
 
         for (int i = 0; i < celestialBodies.size(); i++) {
-            for (int j = i + 1; j < celestialBodies.size(); j++) {
+            for (int j = i + 1; j < celestialBodies.size(); j++) { // we use the i + 1 to ensure that we avoid double counting pairs so, A-B, B-A etc would double the amount of total potential energy which is wrong!!!
                 Body bodyA = celestialBodies.get(i);
                 Body bodyB = celestialBodies.get(j);
 
@@ -124,7 +139,6 @@ public class CalculationEngine {
             }
         }
         return totalPotentialEnergy;
-
     }
 
     /**
@@ -154,6 +168,7 @@ public class CalculationEngine {
 
         if (totalDistance == 0)
             return; // this stops us dividing by zero which can be catastrophic for a program i think
+
         double magnitudeOfForce = gravitationalConstant * (bodyA.getMass() * bodyB.getMass()) / Math.pow(totalDistance, 2);
 
 
@@ -190,7 +205,6 @@ public class CalculationEngine {
         return (massOfBodyB * Math.pow(orbitalVelocity, 2)) / totalDistance;
     }
 
-//
 //    public static double calculateOrbitalVelocity(Body mainBody, double distance) {
 //        return Math.sqrt(gravitationalConstant * mainBody.getMass() / distance);
 //
