@@ -2,7 +2,7 @@ package physicsCalculator;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BodyTest {
 
@@ -51,10 +51,31 @@ public class BodyTest {
 
 
     @Test
-    void assertThatAYearInSecondsReturns1YearInString() {
+    void assertThatAYearInSecondsReturnsOneYearInString() {
         String result = CalculationBody.timeConversionMethod(31_536_000);
         String expected = "1 year";
         assertEquals(expected, result);
     }
+
+    @Test
+    void assertThatTimeConversionReturnsZeroSecondsForZeroInput() {
+        String result = CalculationBody.timeConversionMethod(0);
+        assertEquals("0 seconds", result);
+    }
+
+    @Test
+    void assertThatTimeConversionHandlesTwoYearsThreeMonths() {
+        double twoYearsThreeMonths = (2 * 31_536_000) + (3 * 2_628_000);
+        String result = CalculationBody.timeConversionMethod(twoYearsThreeMonths);
+        assertTrue(result.contains("2 years, 3 months"));
+    }
+
+    @Test
+    void assertThatRandomMessageGeneratorReturnsNonEmptyString() {
+        String message = CalculationBody.randomMessageGenerator();
+        assertNotNull(message);
+        assertFalse(message.isEmpty());
+    }
+
 
 }

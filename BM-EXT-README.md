@@ -1,3 +1,6 @@
+# NOTE TO ASSESSOR: THIS IS AN OLD README WHICH EXCEEDS THE WORD COUNT, PLEASE DO NOT READ THIS ONE, README.MD IS THE ONE.
+# THIS IS KEPT HERE FOR MY OWN NOTES.
+
 # Astronomical Physics Calculator
 
 A Java-based physics simulation program that models gravitational interactions between celestial bodies (planets and stars) in 3D coordinate space.
@@ -16,7 +19,7 @@ There are two ways to run the app you can either run `Main.java` or run the test
 - **`Body.java`** (abstract): Base class for all celestial bodies with position, velocity, mass, and force tracking
 - **`Planet.java`**: Extends `Body.java` with planet-specific types (Gas Giant, Terrestrial, Dwarf, Ice Giant, Exoplanet)
 - **`Star.java`**: Extends `Body` with star-specific types (Red Giant, Blue Giant, Brown Dwarf, White Dwarf, Neutron Star, Yellow Dwarf)
-- **`CalculationEngine.java.java`**: Core physics calculations (forces, energy, collisions)
+- **`CalculationEngine.java`**: Core physics calculations (forces, energy, collisions)
 - **`CalculationBody`**: Simulation setup and preset scenarios
 
 ### Usage

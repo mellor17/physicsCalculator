@@ -11,7 +11,7 @@ public class Planet extends Body {
 
     /**
      * This is a constructor this uses the variables in the class to create a new object that can be used across our programme
-     * I also added Z in after making the initial program so that is why it is at the end. NOTE: this has been changed after a refactor
+     * I also added Z in after making the initial program so that is why it is at the end.
      * Extended class from abstract body, super keyword is used in reference to the parent class, when used in a constructor as below
      * it calls the parent class constructor and takes all of the params from the planet and then passes them to the body
      * @param name

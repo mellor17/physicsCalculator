@@ -6,7 +6,6 @@ public class Star extends Body{
     /**
      * This is a constructor this uses the variables in the class to create a new object that can be used across our programme
      * I also added Z in after making the initial program so that is why it is at the end. NOTE: this has been changed after a refactor
-     *
      * @param name
      * @param initial_mass
      * @param initial_x
@@ -29,5 +28,9 @@ public class Star extends Body{
         WHITE_DWARF,
         NEUTRON_STAR,
         YELLOW_DWARF
+    }
+
+    public StarType getStarType() {
+        return starType;
     }
 }

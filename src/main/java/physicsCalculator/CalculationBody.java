@@ -1,11 +1,11 @@
 package physicsCalculator;
 
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 
 import static physicsCalculator.CalculationEngine.isFinished;
 import static physicsCalculator.CalculationEngine.watchSimulation;
-import static physicsCalculator.InputUtility.scanner;
+import static physicsCalculator.InputUtility.*;
 
 
 public class CalculationBody {
@@ -29,7 +29,6 @@ public class CalculationBody {
 
     /**
      * Method used to choose simulation options, may add more for different bodies.
-     *
      */
     public static void nBodyProblem() { // I have also used the extract method command in intellij IDE  to create this method. See below for its full details
         while (!isFinished) {
@@ -43,8 +42,7 @@ public class CalculationBody {
 
             // this line creates a new array list which can only hold the body object which has been defined in our body class, it can also hold any planet or star object as they are children of the body class
             ArrayList<Body> celestialBodies = new ArrayList<>();
-            System.out.print("Choice: ");
-            int presetChoice = scanner.nextInt();
+            int presetChoice = inputCheckerInt("Choice: ");
             System.out.println("------------------------------------------------");
 
             if (presetChoice == 1) {
@@ -70,14 +68,14 @@ public class CalculationBody {
 
             } else if (presetChoice == 3) {
                 watchSimulationCheck();
-                System.out.print("Enter the number of bodies (N): ");
-                int numberOfBodies = scanner.nextInt();
+                int numberOfBodies = inputCheckerInt("Enter the number of bodies (N): ");
 
-                System.out.print("Enter the simulation time step (Δt): "); // delta t, this determines how much time in seconds that the program should move after each loop
-                double timeStep = scanner.nextDouble();                    // delta t just means small step or change and is a greek letter
+                // delta t, this determines how much time in seconds that the program should move after each loop
+                // delta t just means small step or change and is a greek letter
+                double timeStep = inputCheckerDouble("Enter the simulation time step in seconds (Δt): ");
 
                 System.out.println("""
-                        Select a simulation time, or choose your own:");
+                        Select a simulation time, or choose your own:
                         1: 1 Year
                         2: 6 Months
                         3: 10 Years
@@ -86,8 +84,8 @@ public class CalculationBody {
                         6: Choose your own simulation time.
                         """);
                 double totalTime;
-                System.out.print("Choice: ");
-                int simulationTimeResponse = scanner.nextInt();
+
+                int simulationTimeResponse = inputCheckerInt("Choice: ");
 
 
                 totalTime = switch (simulationTimeResponse) { // intelliJ idea IDE recommended this to me as a fix looks better than previous "normal switch"
@@ -96,13 +94,9 @@ public class CalculationBody {
                     case 3 -> tenYearsInSeconds;
                     case 4 -> fiveYearsInSeconds;
                     case 5 -> oneMonthInSeconds;
-                    default -> {
-                        System.out.print("Enter the total simulation duration in seconds (S):");
-                        yield scanner.nextInt(); // this is used to return a value in the default case, so if we have
-                    }
+                    default ->
+                            inputCheckerInt("Enter the total simulation duration in seconds (S):"); // this is used to return a value in the default case, if we didn't have a method here we would use yield
                 };
-
-                scanner.nextLine(); // added this to fix the input buffer consuming the newline character added when doing next int, cause it was breaking body name input section
 
 
                 System.out.println("---------------------");
@@ -110,55 +104,41 @@ public class CalculationBody {
                 for (int i = 0; i < numberOfBodies; i++) {
 
                     String bodyName = String.valueOf(i + 1); // this sets the name of the body just to the number if no name is specified
-                    System.out.println("Would you like to enter name for this body? (Y/N)");
-                    String bodyHasNameResponse = scanner.nextLine();
+                    String bodyHasNameResponse = inputCheckerString("Would you like to enter name for this body? (Y/N)");
 
                     if (bodyHasNameResponse.toLowerCase().contains("y")) {
-                        System.out.println("Enter a name for the Body: ");
-                        bodyName = scanner.nextLine();
+                        bodyName = inputCheckerString("Enter a name for this body: ");
                     }
 
 
                     System.out.println("--- Body: " + bodyName + " ---");
 
-                    System.out.print("Mass (kg): ");
-                    double mass = scanner.nextDouble();
+                    double mass = inputCheckerDouble("Mass (kg): ");
 
-                    System.out.print("Initial X Position (m): ");
-                    double positionX = scanner.nextDouble();
+                    double positionX = inputCheckerDouble("Initial X Position (m): ");
 
-                    System.out.print("Initial Y Position (m): ");
-                    double positionY = scanner.nextDouble();
+                    double positionY = inputCheckerDouble("Initial Y Position (m): ");
 
-                    System.out.print("Initial Z Position (m): ");
-                    double positionZ = scanner.nextDouble();
+                    double positionZ = inputCheckerDouble("Initial Z Position (m): ");
 
-                    System.out.print("Initial X Velocity (m/s): ");
-                    double velocityX = scanner.nextDouble();
+                    double velocityX = inputCheckerDouble("Initial X Velocity (m/s): ");
 
-                    System.out.print("Initial Y Velocity (m/s): ");
-                    double velocityY = scanner.nextDouble();
+                    double velocityY = inputCheckerDouble("Initial Y Velocity (m/s): ");
 
-                    System.out.print("Initial Z Velocity (m/s): ");
-                    double velocityZ = scanner.nextDouble();
+                    double velocityZ = inputCheckerDouble("Initial Z Velocity (m/s): ");
 
-                    System.out.print("Body Radius (m): ");
-                    double radius = scanner.nextDouble();
+                    double radius = inputCheckerDouble("Body Radius (m): ");
 
-                    System.out.println("Is your body a Planet (1) or Star (2)?");
-                    int objectType = scanner.nextInt();
-                    scanner.nextLine();
+                    int objectType = inputCheckerInt("Is your body a Planet (1) or Star (2)?");
 
                     if (objectType == 1) {
-                        System.out.println("""
+                        int planetTypeChoice = inputCheckerInt("""
                                 What is the type of the planet?
                                 1. GAS GIANT
                                 2. TERRESTRIAL
                                 3. DWARF
                                 4. ICE GIANT
                                 5. EXOPLANET""");
-                        int planetTypeChoice = scanner.nextInt();
-                        scanner.nextLine();
                         Planet.PlanetType planetType = switch (planetTypeChoice) {
                             case 1 -> Planet.PlanetType.GAS_GIANT; // the reason why i have to access them like this is because enums cannot be instantiated, so I have to call it each time like this to access variables within enum
                             case 2 -> Planet.PlanetType.TERRESTRIAL;
@@ -170,7 +150,7 @@ public class CalculationBody {
                         celestialBodies.add(new Planet(bodyName, mass, positionX, positionY, positionZ, velocityX, velocityY, velocityZ, radius, planetType));
 
                     } else {
-                        System.out.println("""
+                        int starTypeChoice = inputCheckerInt("""
                                 What is the type of the star?
                                 1. RED GIANT
                                 2. BLUE GIANT
@@ -178,8 +158,7 @@ public class CalculationBody {
                                 4. WHITE DWARF
                                 5. NEUTRON STAR
                                 6. YELLOW DWARF""");
-                        int starTypeChoice = scanner.nextInt();
-                        scanner.nextLine();
+
                         Star.StarType starType = switch (starTypeChoice) {
                             case 1 -> Star.StarType.RED_GIANT;
                             case 2 -> Star.StarType.BLUE_GIANT;
@@ -204,7 +183,7 @@ public class CalculationBody {
     }
 
 
-    //plays when the simulation ends
+    //plays when the simulation ends just gives a random cheesy message :-)
     public static String randomMessageGenerator() {
         String[] randomMessages = {"Thank you for joining my programme—can’t wait to have you back soon!", "Appreciate you being part of my program; hope we cross paths again soon!", "Thanks for taking part in my programme; looking forward to seeing you again!", "Thanks for being here—hope to welcome you back to the programme soon!", "Grateful you joined the programme; I hope we get to do this again soon!", "Thanks for sticking with it—consider this your official permission to skive off home until next time.", "You were brilliant—almost suspiciously so. Pop back in before we start missing you.", "Right, that’s the lot mind how you go, and come back before my processors run out."};
         int randNum = (int) (Math.random() * randomMessages.length);
@@ -213,8 +192,8 @@ public class CalculationBody {
 
     /**
      * Converts seconds counter in engine into a much more readable format
-     * Example: 31_536_000 should = 1 year
-     * / here we divide the time by the total time left and cast it as an integer so we get the whole figure of the number of years for example
+     * Example: 31_536_000 should equal 1 year
+     * here we divide the time by the total time left and cast it as an integer so we get the whole figure of the number of years for example
      * this same logic is repeated throughout so we can have the whole number of the time measurement barring seconds
      */
     public static String timeConversionMethod(double seconds) {
@@ -248,7 +227,7 @@ public class CalculationBody {
             result = result + years + (years == 1 ? " year, " : " years, "); // this uses a ternary operator which is just essentially a shorthand if statement
         }
         if (months > 0) {
-            result = result + months + (months == 1 ? " month, " : " months, ");
+            result = result + months + (months == 1 ? " month, " : " months, "); // example: (if months is equal to one then we append month, else append months)
         }
         if (weeks > 0) {
             result = result + weeks + (weeks == 1 ? " week, " : " weeks, ");
@@ -280,8 +259,7 @@ public class CalculationBody {
     }
 
     public static void watchSimulationCheck() {
-        System.out.println("Would you like to watch the simulation print out (1) or have it finish instantly?(2)");
-        int response = scanner.nextInt();
+        int response = inputCheckerInt("Would you like to watch the simulation print out (1) or have it finish instantly?(2)");
         try {
             if (response == 1) {
                 watchSimulation = true;
@@ -292,8 +270,4 @@ public class CalculationBody {
             System.out.println("Invalid input, please try again.");
         }
     }
-
-//
-//    public void handleExceptions()
-
 }
