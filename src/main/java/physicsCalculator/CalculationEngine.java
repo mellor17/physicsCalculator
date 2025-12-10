@@ -2,10 +2,10 @@ package physicsCalculator;
 
 import java.util.ArrayList;
 
-import static physicsCalculator.InputUtility.scanner;
+import static physicsCalculator.InputUtility.*;
 
 public class CalculationEngine {
-    // the letter e is used to denote the power of 10, so
+    // the letter e is used to denote the power of 10, so e.g.
     // mass of sun would be 1.989 x 10^30kg
     public static final double gravitationalConstant = 6.674e-11;
     public static boolean isFinished = false;
@@ -21,7 +21,7 @@ public class CalculationEngine {
             }
 
 
-            //This loop works by iterating over i first
+            //This loop works by iterating over i first then through j so we have a calculation for each body with the arraylist
             for (int i = 0; i < celestialBodies.size(); i++) {
                 for (int j = i + 1; j < celestialBodies.size(); j++) { // adding one ensures that when running the simulation we don't calculate the same pair twice, so e.g A = B
 
@@ -44,7 +44,6 @@ public class CalculationEngine {
                     if (currentDuration == 0 || (currentDuration / timeStep) % printFrequency == 0) {
 
 
-                        //TODO: Write simulation results to file with date prefixed or affixed
                         System.out.printf("\u001B[35m" + "--- Time: %s --- \n", CalculationBody.timeConversionMethod(currentDuration));
                         for (Body currentBody : celestialBodies) {
                             String color = currentBody.getColorCode();
@@ -71,9 +70,7 @@ public class CalculationEngine {
 
         }
         if (!isTesting) {
-            scanner.nextLine(); // this is used to consume input buffer from watch sim check
-            System.out.println("Are you finished simulating? (Y/N)");
-            String finishedResponse = scanner.nextLine();
+            String finishedResponse = inputCheckerString("Are you finished simulating? (Y/N)");
             if (finishedResponse.toLowerCase().contains("y")) {
                 System.out.println(CalculationBody.randomMessageGenerator());
                 isFinished = true;
@@ -97,7 +94,6 @@ public class CalculationEngine {
      * Then it calculated the speed of each body by adding the velocity squared of X,Y,Z and then getting a new value of the kinetic energy of the body it is iterating over
      * by multiplying 0.5, the mass of the body and then the velocity squared or speed
      * Finally it is added to the total kinetic energy to return the value for the calculate total energy method
-     *
      */
     public static double calculateTotalKineticEnergy(ArrayList<Body> bodies) {
 
@@ -196,7 +192,6 @@ public class CalculationEngine {
      * Fe = m * v^2 / r
      * Centripetal Force = mass of rotating body * orbital velocity squared / total distance  between both bodies
      */
-
     public static double calculateCentripetalForce(Body bodyA, Body bodyB) {
         double totalDistance = getTotalDistance(bodyB, bodyA);
         double massOfBodyB = bodyB.getMass();
