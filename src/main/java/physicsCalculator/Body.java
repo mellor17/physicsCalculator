@@ -166,7 +166,7 @@ public abstract class Body {
         }
     }
 
-    //NOTE: IF YOU ARE RUNNING ON A WINDOW COMPUTER THEN THESE MIGHT NOT DISPLAY AS CMD PROMPT CANNOT DISPLAY EMOJIS!!!!!!
+    //NOTE: IF YOU ARE RUNNING ON A WINDOWS COMPUTER THEN THESE MIGHT NOT DISPLAY AS CMD PROMPT CANNOT DISPLAY EMOJIS!!!!!!
     // if not then you are ok :)
     public String getEmoji() {
         String nameLower = name.toLowerCase();
